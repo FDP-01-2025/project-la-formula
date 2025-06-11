@@ -1,0 +1,72 @@
+Claro, aquí tienes un directorio con las funciones principales de rlutil.h, una biblioteca ligera para manipular la consola en C++. Es muy útil para hacer interfaces de texto tipo juegos, menús, etc.
+
+📚 Directorio de Funciones de rlutil.h
+🖍️ Colores de Texto y Fondo
+Estas funciones permiten cambiar el color de la consola.
+
+
+rlutil::setColor(int c);            // Cambia el color del texto
+rlutil::setBackgroundColor(int c);  // Cambia el color de fondo (solo Windows)
+rlutil::resetColor();               // Restaura los colores por defecto
+Colores disponibles:
+
+
+BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN, GREY,
+DARKGREY, LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED, LIGHTMAGENTA, YELLOW, WHITE
+
+🧭 Control de Cursor
+Manipula la posición del cursor.
+
+
+rlutil::locate(int x, int y);    // Mueve el cursor a (x, y)
+rlutil::whereX();                // Retorna la posición X actual del cursor
+rlutil::whereY();                // Retorna la posición Y actual del cursor
+
+🧹 Limpieza y manipulación de pantalla
+
+
+rlutil::cls();           // Limpia la pantalla
+rlutil::msleep(int ms);  // Espera en milisegundos
+rlutil::hidecursor();    // Oculta el cursor
+rlutil::showcursor();    // Muestra el cursor
+
+⌨️ Entrada del Teclado
+
+
+rlutil::anykey();        // Espera a que el usuario presione una tecla
+rlutil::getkey();        // Captura una tecla y devuelve su código
+rlutil::kbhit();         // Devuelve true si se presionó alguna tecla (sin bloquear)
+
+🎮 Movimiento estilo videojuegos
+Para hacer menús o moverte con teclas como las flechas:
+
+
+enum {
+    KEY_ESCAPE = 0, KEY_ENTER, KEY_SPACE,
+    KEY_INSERT, KEY_HOME, KEY_PGUP,
+    KEY_DELETE, KEY_END, KEY_PGDOWN,
+    KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT
+};
+
+Puedes usarlos con getkey():
+
+
+int key = rlutil::getkey();
+if (key == rlutil::KEY_UP) {
+    // subir opción
+}
+
+
+✅ Ejemplo Básico
+
+#include <iostream>
+#include "rlutil.h"
+
+int main() {
+    rlutil::setColor(rlutil::GREEN);
+    rlutil::locate(10, 5);
+    std::cout << "¡Hola desde rlutil!" << std::endl;
+    rlutil::anykey();
+    rlutil::cls();
+    return 0;
+}
