@@ -2,6 +2,8 @@
 #include <windows.h>
 #include "rlutil.h"
 #include <limits>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -10,7 +12,24 @@ const int MAP_HEIGHT = 20;
 const int VIEW_WIDTH = 40;
 const int VIEW_HEIGHT = 20;
 
-// Mapa con enemigos (letra 'E')
+// Structs
+struct Personaje {
+    int hp = 100;
+    int hpMax = 100;
+    int dano = 10;
+    int nivel = 1;
+};
+
+struct Enemigo {
+    string nombre;
+    int hp;
+    int hpMax;
+    int dano;
+    string ascii;
+};
+
+Personaje jugador;
+
 char mapa[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "################################################################################",
     "#......................~~~~~~.........T.............~~~~~...............~~~~~..#",
@@ -34,19 +53,8 @@ char mapa[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "################################################################################"
 };
 
-// Struct para jugador
-struct Personaje {
-    int x;
-    int y;
-    int hp;
-    int hpMax;
-    int dano;
-    int nivel;
-};
-
-Personaje jugador = {10, 10, 100, 100, 10, 1};
-
-// Movimiento con delay (opcional)
+int playerX = 10;
+int playerY = 10;
 bool keyHeld = false;
 DWORD lastMoveTime = 0;
 const DWORD repeatDelay = 80;
@@ -54,79 +62,115 @@ const DWORD repeatDelay = 80;
 void mostrarHUD() {
     rlutil::locate(1, 1);
     rlutil::setColor(rlutil::WHITE);
-    cout << "Nivel: " << jugador.nivel << "   Daño: " << jugador.dano << "   HP: " << jugador.hp << "    ";
+    cout << "Nivel: " << jugador.nivel << "   Da\xF1o: " << jugador.dano << "   HP: " << jugador.hp << "    ";
+}
+
+string barraHP(int hpActual, int hpMax, int largo = 15) {
+    if (hpActual < 0) hpActual = 0;
+    int llenos = (hpActual * largo) / hpMax;
+    int vacios = largo - llenos;
+    return "[" + string(llenos, '#') + string(vacios, '-') + "]";
 }
 
 bool iniciarCombate() {
-    int enemyHP = 30;
-    int enemyDano = 5;
+    Enemigo enemigo = {
+        "Slime mutante",
+        50, 50,
+        8,
+        R"(     __
+   ~( @\   \\
+  ___/   \__/ 
+ /__|_|__|_| )"
+    };
 
     rlutil::cls();
-    cout << "¡Un enemigo salvaje apareció!\n";
+    cout << enemigo.nombre << " aparece!\n";
 
-    // Limpiar buffer solo una vez al inicio del combate
-    cin.clear();
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    FlushConsoleInputBuffer(GetStdHandle(STD_INPUT_HANDLE));
+    while (jugador.hp > 0 && enemigo.hp > 0) {
+        rlutil::locate(1, 1);
+        cout << "=============================================";
+        rlutil::locate(1, 2);
+        cout << "Jugador HP: " << jugador.hp << " " << barraHP(jugador.hp, jugador.hpMax);
+        rlutil::locate(1, 3);
+        cout << enemigo.nombre << " HP: " << enemigo.hp << " " << barraHP(enemigo.hp, enemigo.hpMax);
+        rlutil::locate(1, 4);
+        cout << "=============================================";
 
-    while (jugador.hp > 0 && enemyHP > 0) {
-        cout << "\nTu HP: " << jugador.hp << "   Enemigo HP: " << enemyHP << "\n";
+        int y = 6;
+        string ascii = enemigo.ascii;
+        size_t pos = 0;
+        while ((pos = ascii.find('\n')) != string::npos) {
+            rlutil::locate(40, y++);
+            cout << ascii.substr(0, pos);
+            ascii.erase(0, pos + 1);
+        }
+
+        rlutil::locate(1, 10);
         cout << "1. Atacar\n2. Curarse\n> ";
-
         int opcion;
         cin >> opcion;
-
         if (cin.fail()) {
-            cin.clear(); // limpiar error si se ingresó letra
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cout << "Entrada inválida. Usa 1 o 2.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), ' ');
+            cout << "Entrada inválida.";
+            Sleep(1000);
+            rlutil::cls();
             continue;
         }
+        rlutil::locate(1, 13);
+        cout << "                                               ";
 
         if (opcion == 1) {
-            enemyHP -= jugador.dano;
-            cout << "Atacaste al enemigo por " << jugador.dano << " de daño.\n";
-        } else if (opcion == 2) {
+            int dmg = rand() % 10 + jugador.dano;
+            enemigo.hp -= dmg;
+            cout << "Atacaste al enemigo por " << dmg << " de da\xF1o.\n";
+        } 
+        else if (opcion == 2) {
             int heal = rand() % 10 + 5;
             jugador.hp += heal;
-            if(jugador.hp > jugador.hpMax) jugador.hp = jugador.hpMax;
+            if (jugador.hp > jugador.hpMax) jugador.hp = jugador.hpMax;
             cout << "Te curaste " << heal << " puntos.\n";
-        } else {
-            cout << "Opción inválida.\n";
+        } 
+        else {
+            cout << "Opcion invalida.";
+            Sleep(1000);
+            rlutil::cls();
             continue;
-        }
-
-        if (enemyHP > 0) {
-            jugador.hp -= enemyDano;
-            cout << "El enemigo te golpea por " << enemyDano << " de daño.\n";
         }
 
         Sleep(1000);
+
+        if (enemigo.hp > 0) {
+            int edmg = rand() % enemigo.dano + 3;
+            jugador.hp -= edmg;
+            rlutil::locate(1, 14);
+            cout << "El enemigo te golpea por " << edmg << " de da\xF1o.";
+        }
+
+        Sleep(1000);
+        rlutil::cls();
     }
 
     if (jugador.hp <= 0) {
-        cout << "\nHas sido derrotado. GAME OVER.\n";
+        rlutil::cls();
+        cout << "Has sido derrotado. GAME OVER.\n";
         exit(0);
     }
 
-    cout << "\n¡Ganaste el combate!\n";
+    cout << "\nVenciste al enemigo!\n";
     jugador.nivel++;
     jugador.dano += 2;
     jugador.hp += 10;
     if (jugador.hp > jugador.hpMax) jugador.hp = jugador.hpMax;
-
-    Sleep(1000);
-    rlutil::cls();
+    Sleep(1500);
     return true;
 }
 
 void moverJugador(int dx, int dy) {
-    int newX = jugador.x + dx;
-    int newY = jugador.y + dy;
+    int newX = playerX + dx;
+    int newY = playerY + dy;
 
-    if (newX >= 0 && newX < MAP_WIDTH &&
-        newY >= 0 && newY < MAP_HEIGHT) {
-        
+    if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT) {
         char destino = mapa[newY][newX];
         if (destino == '#') return;
 
@@ -136,26 +180,26 @@ void moverJugador(int dx, int dy) {
             }
         }
 
-        jugador.x = newX;
-        jugador.y = newY;
+        playerX = newX;
+        playerY = newY;
     }
 }
 
 void dibujarVista() {
-    int offsetX = jugador.x - VIEW_WIDTH / 2;
-    int offsetY = jugador.y - VIEW_HEIGHT / 2;
+    int offsetX = playerX - VIEW_WIDTH / 2;
+    int offsetY = playerY - VIEW_HEIGHT / 2;
 
     for (int y = 0; y < VIEW_HEIGHT; y++) {
         for (int x = 0; x < VIEW_WIDTH; x++) {
             int mapX = offsetX + x;
             int mapY = offsetY + y;
 
-            rlutil::locate(x + 1, y + 2); // línea 2 por el HUD
+            rlutil::locate(x + 1, y + 2);
 
             if (mapX < 0 || mapX >= MAP_WIDTH || mapY < 0 || mapY >= MAP_HEIGHT) {
                 rlutil::setColor(rlutil::WHITE);
                 cout << ' ';
-            } else if (mapX == jugador.x && mapY == jugador.y) {
+            } else if (mapX == playerX && mapY == playerY) {
                 rlutil::setColor(rlutil::LIGHTRED);
                 cout << '@';
             } else {
@@ -172,7 +216,6 @@ void dibujarVista() {
             }
         }
     }
-
     rlutil::setColor(rlutil::WHITE);
 }
 
@@ -180,7 +223,7 @@ void chequearMovimiento() {
     static int lastDir = 0;
     DWORD now = GetTickCount();
 
-    auto mover = [&](int dir, int dx, int dy) {          //Lambda, usada para no repetir cada caso de tecla 
+    auto mover = [&](int dir, int dx, int dy) {
         if (GetAsyncKeyState(dir) & 0x8000) {
             if (!keyHeld || lastDir != dir || now - lastMoveTime > repeatDelay) {
                 moverJugador(dx, dy);
@@ -200,6 +243,7 @@ void chequearMovimiento() {
 }
 
 int main() {
+    srand(time(0));
     rlutil::hidecursor();
     system("cls");
 
