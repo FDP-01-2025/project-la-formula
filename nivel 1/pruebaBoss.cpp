@@ -16,10 +16,10 @@ bool keyHeld = false;
 unsigned long lastMoveTime = 0;
 const unsigned long repeatDelay = 80;
 
-int enemigosDerrotados = 0;
-const int TOTAL_ENEMIGOS = 5;
+int enemigosDerrotados = 0;      
+const int TOTAL_ENEMIGOS = 4;
 
-bool puertaDesbloqueada = false;     
+bool puertaDesbloqueada = false;      //para desbloquear al boss
 bool jefeDerrotado = false;
 
 void mostrarHUD() {
@@ -35,15 +35,6 @@ string barraHP(int hpActual, int hpMax, int largo) {
     return "[" + string(llenos, '#') + string(vacios, '-') + "]";
 }
 
-int contarEnemigosRestantes() {
-    int total = 0;
-    for (int y = 0; y < MAP_HEIGHT; ++y) {
-        for (int x = 0; x < MAP_WIDTH; ++x) {
-            if (mapa[y][x] == 'E') total++;
-        }
-    }
-    return total;
-}
 
 bool iniciarCombateJefe();
 
@@ -54,26 +45,20 @@ bool iniciarCombate() {
         50,
         8,
        R"(    
-          ____    
-        .'* *.'
-     __/_*___*_\
-    / _________ \
-   | /         \ |
-   ||  0   0    || 
-   ||     ^     ||     
-   |  \___|___/ |/
-    \  \_____/  /
-     \_________/
-     _|_____|_
-  .-' ||||| ||`-.
- /    ||||| ||   \
-|     ||||| ||    |
-\     ||||| ||    /
- '-.__||||_|_.-'-'
-      |  | |  |
-     [===[ ]===]
-      |_|   |_|
-     (__)   (__))"
+                   <((((((\\\
+                   /      . }\
+                   ;--..--._|}
+(\                 '--/\--'  )
+ \\                | '-'  :'|
+  \\               . -==- .-|
+   \\               \.__.'   \--._
+   [\\          __.--|       //  _/'--.
+   \ \\       .'-._ ('-----'/ __/      \
+    \ \\     /   __>|      | '--.       |
+     \ \\   |   \   |     /    /       /
+      \ '\ /     \  |     |  _/       /
+       \  \       \ |     | /        /
+        \  \      \        /        / )"
     };
 
     rlutil::cls();
@@ -121,13 +106,13 @@ bool iniciarCombate() {
         if (opcion == 1) {
             int dmg = rand() % 10 + jugador.dano;
             enemigo.hp -= dmg;
-            rlutil::locate (75,14);
+            rlutil::locate (1,17);
             cout << "Atacaste al enemigo por " << dmg << " de dano.\n";
         } else if (opcion == 2) {
             int heal = rand() % 10 + 5;
             jugador.hp += heal;
             if (jugador.hp > jugador.hpMax) jugador.hp = jugador.hpMax;
-            rlutil::locate (75,14);
+            rlutil::locate (1,17);
             cout << "Te curaste " << heal << " puntos.\n";
         } else {
             rlutil::locate (1,14);
@@ -164,25 +149,30 @@ bool iniciarCombate() {
     if (jugador.hp > jugador.hpMax) jugador.hp = jugador.hpMax;
     enemigosDerrotados++;
 
-    if (!puertaDesbloqueada && contarEnemigosRestantes() == 0) {
-        puertaDesbloqueada = true;
-        cout << "\n¡Has derrotado a todos los enemigos! Una puerta secreta se ha abierto...\n";
-        Sleep(2000);
-        
-       bool puertaColocada = false;
+    cout << "Enemigos restantes: " << TOTAL_ENEMIGOS - enemigosDerrotados << endl;
+    Sleep(2000); // para poder ver el mensaje antes de que se limpie
 
-    for (int y = 0; y < MAP_HEIGHT && !puertaColocada; y++) {
-      for (int x = 0; x < MAP_WIDTH && !puertaColocada; x++) {
-        if (mapa[y][x] == ' ') {
-            mapa[y][x] = 'P';
-            puertaColocada = true;
+    if (!puertaDesbloqueada && enemigosDerrotados >= TOTAL_ENEMIGOS) {
+        puertaDesbloqueada = true;
+        rlutil::locate(1,VIEW_HEIGHT + 3);
+        rlutil::setColor(rlutil::YELLOW);
+        cout << "\n¡Has derrotado a todos los enemigos! Una puerta secreta se ha abierto...\n";
+        rlutil::setColor(rlutil::WHITE);
+        Sleep(2500);   
+
+        //Limpiar la linea del mensaje 
+        rlutil::locate(1, VIEW_HEIGHT + 3);
+        cout << string(80, ' ');
+
+         // abrir la puerta: cambiar los 'O' por 'P'
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            if (mapa[y][x] == 'O') {
+                mapa[y][x] = 'P';
+            }
         }
     }
 }
-
-    }
-    Sleep(1500);
-    return true;
 }
 
 void moverJugador(int dx, int dy) {
@@ -197,11 +187,42 @@ void moverJugador(int dx, int dy) {
             if (iniciarCombate()) {
                 mapa[newY][newX] = '.';
             }
-        } else if (destino == 'P' && !jefeDerrotado) {
-            jefeDerrotado = true;
-            iniciarCombateJefe();
-            mapa[newY][newX] = '.';
+        } 
+        if (destino == 'P') {
+
+            if (!puertaDesbloqueada) {
+        // Puerta bloqueada, no dejar pasar
+        rlutil::locate(1, VIEW_HEIGHT + 3);
+        cout << "La puerta esta cerrada. Derrota a todos los enemigos primero.";
+        Sleep(1500);
+        rlutil::locate(1, VIEW_HEIGHT + 3);
+        cout << string(80, ' ');
+        return;
+    } else if (!jefeDerrotado) {
+        // Puerta abierta y aún no luchaste contra el jefe
+        jefeDerrotado = true;
+        iniciarCombateJefe();
+        mapa[newY][newX] = '.';  // Si quieres que desaparezca después
+    }
+}
+
+       else if (destino == 'P') {
+            if (!puertaDesbloqueada) {
+              rlutil::locate(1, VIEW_HEIGHT + 3);
+              cout << "La puerta esta cerrada. Derrota a todos los enemigos primero.";
+              Sleep(800);
+        
+    } else if (!jefeDerrotado) {
+        jefeDerrotado = true;
+        iniciarCombateJefe();
+        // Si quieres que todas las P desaparezcan:
+        for (int y = 0; y < MAP_HEIGHT; y++) {
+            for (int x = 0; x < MAP_WIDTH; x++) {
+                if (mapa[y][x] == 'P') mapa[y][x] = '.';
+            }
         }
+    }
+}
 
         playerX = newX;
         playerY = newY;
@@ -225,21 +246,34 @@ void dibujarVista() {
             } else if (mapX == playerX && mapY == playerY) {
                 rlutil::setColor(rlutil::LIGHTRED);
                 cout << '@';
-            } else {
-                char tile = mapa[mapY][mapX];
-                switch (tile) {
-                    case '#': rlutil::setColor(rlutil::GREY); break;
-                    case '~': rlutil::setColor(rlutil::CYAN); break;
-                    case 'T': rlutil::setColor(rlutil::GREEN); break;
-                    case '.': rlutil::setColor(rlutil::BROWN); break;
-                    case 'E': rlutil::setColor(rlutil::LIGHTBLUE); break;
-                    case 'P': rlutil::setColor(rlutil:: RED); break;
-                    default: rlutil::setColor(rlutil::WHITE); break;
-                }
-                cout << tile;
+                
+            } 
+
+         else {
+        char tile = mapa[mapY][mapX];
+
+        switch (tile) {
+        case '#': rlutil::setColor(rlutil::GREY); break;
+        case '~': rlutil::setColor(rlutil::CYAN); break;
+        case 'T': rlutil::setColor(rlutil::GREEN); break;
+        case '.': rlutil::setColor(rlutil::BROWN); break;
+        case 'E': rlutil::setColor(rlutil::LIGHTBLUE); break;
+        case 'P':
+        if (puertaDesbloqueada)
+        rlutil::setColor(rlutil::MAGENTA);
+
+        else
+        rlutil::setColor(rlutil::RED);
+        break;
+
+        default: rlutil::setColor(rlutil::WHITE); break;
+    }
+    cout << tile;
+            
             }
         }
     }
+
     rlutil::setColor(rlutil::WHITE);
 }
 
