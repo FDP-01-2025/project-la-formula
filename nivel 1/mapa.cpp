@@ -1,4 +1,4 @@
-#include "mapa.h"
+#include "Archi_h/mapa.h"
 
 char mapa[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "################################################################################",
