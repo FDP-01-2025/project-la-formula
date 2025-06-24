@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -8,26 +9,40 @@ int colorear(char c)
 {
     switch (c)
     {
-    case ':': return rlutil::LIGHTCYAN;
-    case '_': return rlutil::LIGHTGREEN;
-    case '#': return rlutil::MAGENTA;
-    case '*': return rlutil::LIGHTMAGENTA;
-    case '+': return rlutil::LIGHTCYAN;
-    case '=': return rlutil::LIGHTCYAN;
-    case '%': return rlutil::GREY;
-    case '@': return rlutil::LIGHTGREEN;
-    case '-': return rlutil::DARKGREY;
-    case '/': return rlutil::BLUE;
-    case '\\': return rlutil::BLUE;
-    case '|': return rlutil::WHITE;
-    default: return rlutil::BLACK;
+    case ':':
+        return rlutil::LIGHTCYAN;
+    case '_':
+        return rlutil::LIGHTGREEN;
+    case '#':
+        return rlutil::MAGENTA;
+    case '*':
+        return rlutil::LIGHTMAGENTA;
+    case '+':
+        return rlutil::LIGHTCYAN;
+    case '=':
+        return rlutil::LIGHTCYAN;
+    case '%':
+        return rlutil::GREY;
+    case '@':
+        return rlutil::LIGHTGREEN;
+    case '-':
+        return rlutil::DARKGREY;
+    case '/':
+        return rlutil::BLUE;
+    case '\\':
+        return rlutil::BLUE;
+    case '|':
+        return rlutil::WHITE;
+    default:
+        return rlutil::DARKGREY;
     }
 }
 
 void crearArchivoArte()
 {
     ofstream archivo("arte.txt");
-    if (!archivo) return;
+    if (!archivo)
+        return;
 
     const char *lineas[] = {
         "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*:::::::::::::",
@@ -77,12 +92,14 @@ void crearArchivoArte()
         archivo << linea << "\n";
 
     archivo.close();
+    rlutil::hidecursor;
 }
 
 void crearArchivoArte2()
 {
     ofstream archivo("arte2.txt");
-    if (!archivo) return;
+    if (!archivo)
+        return;
 
     const char *lineas[] = {
         "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
@@ -134,7 +151,8 @@ void crearArchivoArte2()
 void mostrarArchivo(const char *nombreArchivo)
 {
     ifstream archivo(nombreArchivo);
-    if (!archivo) return;
+    if (!archivo)
+        return;
 
     char linea[1024];
     while (archivo.getline(linea, sizeof(linea)))
@@ -147,7 +165,6 @@ void mostrarArchivo(const char *nombreArchivo)
             cout << linea[i];
         }
 
-        
         for (int i = longitud; i < 100; ++i)
         {
             cout << ' ';
@@ -159,18 +176,81 @@ void mostrarArchivo(const char *nombreArchivo)
     archivo.close();
 }
 
+void menuInteractivo(const char *nombreArchivo)
+{
+    int i = 0;
+    int key;
+    rlutil::hidecursor();
+
+    mostrarArchivo(nombreArchivo); 
+    rlutil::locate(75, 4 + i);
+    cout << (char)175;
+ 
+    do
+    {
+        key = rlutil::getkey();
+
+        
+        rlutil::locate(75, 4 + i);
+        cout << " ";
+
+        switch (key)
+        {
+        case 119: 
+        case 87:
+            i--;
+            if (i < 0) i = 0;
+            break;
+
+        case 115: 
+        case 83:
+            i++;
+            if (i > 2) i = 2;
+            break;
+        }
+
+        
+        rlutil::locate(75, 4 + i);
+        cout << (char)175;
+
+    } while (key != rlutil::KEY_ENTER);
+    switch (i)
+    {
+    case 2:
+        cout<<"la aventura puede esperar...";
+        rlutil::msleep(1500);
+        exit(0);
+        break;
+    case 1:
+    cout<<"cargando partida...";
+    rlutil::msleep(1500);
+    break;
+    case 0:
+    cout<<"la aventura apenas empieza";
+    rlutil::msleep(1500);
+    break;
+    
+    default:
+        break;
+    }
+
+    rlutil::resetColor();
+    rlutil::cls();
+    
+}
+
+
 int main()
 {
     crearArchivoArte();
     crearArchivoArte2();
 
     mostrarArchivo("arte.txt");
-
     cin.ignore();
     rlutil::cls();
 
-    mostrarArchivo("arte2.txt");
-
+    menuInteractivo("arte2.txt");
     cin.get();
+
     return 0;
 }
