@@ -224,6 +224,7 @@ void menuInteractivo(const char *nombreArchivo)
     case 1:
     cout<<"cargando partida...";
     rlutil::msleep(1500);
+    
     break;
     case 0:
     cout<<"la aventura apenas empieza";

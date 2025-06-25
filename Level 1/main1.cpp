@@ -11,6 +11,7 @@
 using namespace std;
 
 int main() {
+    
     srand(time(0));       //inicializa el generador de números aleatorios con la hora actual como semilla. Esto para los ataques/curaciones
     rlutil::hidecursor(); //inicializa el generador de números aleatorios con la hora actual como semilla.
     system("cls");        //Limpia toda la consola al iniciar el juego.
