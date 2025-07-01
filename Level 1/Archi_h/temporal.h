@@ -3,7 +3,7 @@
 #include "variables.h"
 
 
-Boss jefeFinal = {    
+Boss firstBoss = {    
     "ZORG PRIME",
     120,
     120,

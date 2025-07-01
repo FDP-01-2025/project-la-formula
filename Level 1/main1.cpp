@@ -13,9 +13,9 @@ int main() {
     system("cls");        //Limpia toda la consola al iniciar el juego.
 
     while (true) {        //bucle principal del juego, se repite para siempre hasta que el juego termine o el jugador muera (true nunca cambia, a no ser que haya un break dentro del while)
-        mostrarHUD();     
-        dibujarVista();         //Mandar a llamar las funciones void.
-        chequearMovimiento();
+        showHUD();     
+        drawView();         //Mandar a llamar las funciones void.
+        checkMovement();
         Sleep(30);        //Espera 30 milisegundos para que la CPU no se sobrecargue y los movimientos sean suaves
     }
 

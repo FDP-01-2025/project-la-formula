@@ -1,32 +1,39 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include "rlutil.h"
 
 using namespace std;
+using namespace rlutil;
 
-struct Personaje {
+struct Character {
     int hp;
     int hpMax;
-    int dano;
-    int nivel;
+    int dmg;
+    int level;
 };
 
-struct Enemigo {
-    std::string nombre;
+struct Enemy {
+    std::string name;
     int hp;
     int hpMax;
-    int dano;
+    int dmg;
     std::string ascii;
 };
 
 
-  string barraHP(int hpActual, int hpMax, int largo = 15){
-    if (hpActual < 0) hpActual = 0;                  // Asegura que no haya vida negativa. Si el personaje tiene -5 de vida, se corrige a 0 para que la barra no salga mal.
-    int llenos = (hpActual * largo) / hpMax;         // Calcula cuántos caracteres deben estar "llenos" (con #)
-    int vacios = largo - llenos;                     // Calcula cuántos caracteres deben estar "vacíos" (con `-`) para completar el tamaño total de la barra.
+  string HPbar(int x, int y, int hpActual, int hpMax, string name){
+    locate(x, y);
+    cout << name << " HP: ";
+    int barWidth = 20;
+    int filled = (hpActual * barWidth) / hpMax;
+    setColor(GREEN);
+    for (int i = 0; i < filled; i++) cout << "#";
+    setColor(RED);
+    for (int i = filled; i < barWidth; i++) cout << "-";
+    setColor(WHITE);
+    cout << " " << hpActual << "/" << hpMax;
+}      
 
-    //string(n, char) crea una cadena con n repeticiones del carácter char.
-    return "[" + string(llenos, '#') + string(vacios, '-') + "]";           
-}
 
 

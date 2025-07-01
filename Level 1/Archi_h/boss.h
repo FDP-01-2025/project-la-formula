@@ -5,10 +5,10 @@
 using namespace std;
 
 struct Boss {
-    string nombre;
+    string name;
     int hp;
     int hpMax;
-    int dano;
+    int dmg;
     string ascii;
 };
 

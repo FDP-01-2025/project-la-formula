@@ -11,19 +11,19 @@ extern const int MAP_HEIGHT;   //alto de mapa
 extern const int VIEW_WIDTH;   //vista de ancho de mapa
 extern const int VIEW_HEIGHT;  //vista de alto de mapa
 
-extern Personaje jugador;      
+extern Character player;      
 extern int playerX, playerY;
 
-extern int enemigosDerrotados;
-extern const int TOTAL_ENEMIGOS;
+extern int defeatedEnemies;
+extern const int TOTAL_ENEMIES;
 
 extern bool keyHeld;
 extern unsigned long lastMoveTime;          //guarda el momento en que se movió por última vez el jugador.
 extern const unsigned long repeatDelay;
 
-extern bool puertaDesbloqueada;
-extern bool jefeDerrotado;
+extern bool unlockGate;
+extern bool bossDefeated;
 
-extern Boss jefeFinal;
+extern Boss firstBoss;
 
 #endif

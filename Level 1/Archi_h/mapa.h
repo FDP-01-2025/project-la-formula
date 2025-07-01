@@ -10,16 +10,16 @@ const int MAP_HEIGHT = 20;   //alto de mapa
 const int VIEW_WIDTH = 50;   //vista de ancho de mapa
 const int VIEW_HEIGHT = 20;  //vista de alto de mapa
 
-char mapa[MAP_HEIGHT][MAP_WIDTH + 1] = {
+char map[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "################################################################################",
     "#......................~~~~~~.........T.............~~~~~...............~~~~~..#",
     "#...######..............~~~~~.............######..........######..............#",
-    "#...######................~~~............##....##..............#..............#",
-    "#...######...............TTT............##....##..............#..............T#",
+    "#...#....#................~~~............##....##..............#..............#",
+    "#...#....#...............TTT............##....##..............#..............T#",
     "#...######........................................####........#.........#####.#",
     "#..................................PPPPPPPPP.....#..#........#..............T.#",
     "#....T..........####..............P.........P.....#..#........####......E......#",
-    "#...............####..............P.........P......................TTT.........#",
+    "#...............#..#..............P.........P......................TTT.........#",
     "#.......~~~.....####....TTT.......P.........P.....................#####........#",
     "#.......~~~.......................P.........P........TTT.....................###",
     "#.......................E..........PPPPPPPPP.................................T#",
@@ -27,18 +27,18 @@ char mapa[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "#............................#####............................................#",
     "#....#####....................#T#.............................................#",
     "#....#T.#...............T.....###..................######.....................#",
-    "#....###...........................................######...........E.........#",
-    "#............E...............TTTT..................######.....................#",
+    "#....###...........................................#....#...........E.........#",
+    "#............E...............TTTT..................#....#.....................#",
     "#..................................................######.....................#",
     "################################################################################"
 };
 
-Personaje jugador = {100, 100, 10, 1};  //hp, hpMax, dano, nivel
+Character player = {100, 100, 10, 1};  //hp, hpMax, dano, nivel
 int playerX = 10, playerY = 10;         //el mapa es una matriz de texto, esto ubica al jugador en la posición (10,10).
-bool puertaDesbloqueada = false;        //para desbloquear al boss
-bool jefeDerrotado = false;
+bool unlockGate = false;        //para desbloquear al boss
+bool bossDefeated = false;
 
-void moverJugador(int dx, int dy){
+void movePlayer(int dx, int dy){
 
     int newX = playerX + dx;
     int newY = playerY + dy;
@@ -46,36 +46,36 @@ void moverJugador(int dx, int dy){
     if (newX < 0 || newX >= MAP_WIDTH || newY < 0 || newY >= MAP_HEIGHT)
         return;       //Evita que el jugador salga de los límites.
 
-        char destino = mapa[newY][newX];  //Se obtiene el carácter que hay en el mapa en la posición nueva.
+        char destiny = map[newY][newX];  //Se obtiene el carácter que hay en el mapa en la posición nueva.
 
-        if (destino == '#') return;
+        if (destiny == '#') return;
 
-        if (destino == 'E') {
+        if (destiny == 'E') {
             if (iniciarCombate()) {
-                mapa[newY][newX] = '.';\
+                map[newY][newX] = '.';\
             }
             return;      //Si no se pone ese return el jugador se estaria moviendo en la pelea 
         } 
 
-    if (destino == 'P') {
+    if (destiny == 'P') {
 
-        if (!puertaDesbloqueada) {
+        if (!unlockGate) {
             rlutil::locate(1, VIEW_HEIGHT + 3);
-            cout << "La puerta está cerrada. Derrota a todos los enemigos primero.";
+            cout << "The door is locked. Defeat all the enemies first.";
             Sleep(1500);
             rlutil::locate(1, VIEW_HEIGHT + 3);
             cout << string(80, ' ');  // limpia el mensaje
             return;
 
-    } else if (!jefeDerrotado) {
-        jefeDerrotado = true;
+    } else if (!bossDefeated) {
+        bossDefeated = true;
 
-        iniciarCombateJefe(jefeFinal);
+        iniciarCombateJefe(firstBoss);
 
         // para que todas las P desaparezcan después de la pelea
         for (int y = 0; y < MAP_HEIGHT; y++) {
             for (int x = 0; x < MAP_WIDTH; x++) {
-                if (mapa[y][x] == 'P') mapa[y][x] = '.';
+                if (map[y][x] == 'P') map[y][x] = '.';
             }
         }
 
@@ -95,7 +95,7 @@ void moverJugador(int dx, int dy){
 }
 
 
-void dibujarVista(){
+void drawView(){
 
     int offsetX = playerX - VIEW_WIDTH / 2;      //Calcula la **esquina superior izquierda** de la "vista"
     int offsetY = playerY - VIEW_HEIGHT / 2;
@@ -116,8 +116,8 @@ void dibujarVista(){
                 
             } 
 
-         else {
-        char tile = mapa[mapY][mapX];
+        else {
+        char tile = map[mapY][mapX];
 
         switch (tile) {
         case '#': rlutil::setColor(rlutil::GREY); break;
@@ -126,7 +126,7 @@ void dibujarVista(){
         case '.': rlutil::setColor(rlutil::BROWN); break;
         case 'E': rlutil::setColor(rlutil::LIGHTBLUE); break;
         case 'P':
-        if (puertaDesbloqueada)
+        if (unlockGate)
         rlutil::setColor(rlutil::MAGENTA);
 
         else
@@ -150,16 +150,16 @@ unsigned long lastMoveTime = 0;          //guarda el momento en que se movió po
 const unsigned long repeatDelay = 80;    ////cantidad mínima de tiempo (80 ms) entre movimientos si se deja la tecla presionada.
 
 
-void chequearMovimiento(){
+void checkMovement(){
 
     static int lastDir = 0;         //Se usa para recordar la última dirección presionada entre llamadas.
     unsigned long now = GetTickCount();  //Guarda el tiempo actual en milisegundos. (es de windows)
 
-    auto mover = [&](int dir, int dx, int dy) {       //función lambda que toma una tecla (dir) Y un desplazamiento dx, dy (para mover al jugador)
+    auto move = [&](int dir, int dx, int dy) {       //función lambda que toma una tecla (dir) Y un desplazamiento dx, dy (para mover al jugador)
         if (GetAsyncKeyState(dir) & 0x8000) {     //Verifica si la tecla **está siendo presionada** en este instante y 0x8000 es un flag que indica si la tecla está físicamente abajo.
         
             if (!keyHeld || lastDir != dir || now - lastMoveTime > repeatDelay) {   //controla si ya puedes mover al jugador de nuevo
-                moverJugador(dx, dy);   //mueve al jugador en esa dirección
+                movePlayer(dx, dy);   //mueve al jugador en esa dirección
                 lastMoveTime = now;     //actualiza el tiempo del último movimiento
                 keyHeld = true;         //marca que la tecla está siendo mantenida
                 lastDir = dir;          //guarda la dirección actual
@@ -169,18 +169,19 @@ void chequearMovimiento(){
         }
     };
 
-    mover('W', 0, -1);
-    mover('S', 0, 1);
-    mover('A', -1, 0);
-    mover('D', 1, 0);
+    move('W', 0, -1);
+    move('S', 0, 1);
+    move('A', -1, 0);
+    move('D', 1, 0);
 }
 
 
-void mostrarHUD(){
+void showHUD(){
 
     rlutil::locate(1, 1);
     rlutil::setColor(rlutil::WHITE);
-    cout << "Nivel: " << jugador.nivel << "   Dano: " << jugador.dano << "   HP: " << jugador.hp << "    ";
+    cout << "Nivel: " << player.level << "   Dano: " << player.dmg << "   HP: " << player.hp << "    ";
+
 }
 
 
