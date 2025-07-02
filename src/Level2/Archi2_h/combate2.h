@@ -21,7 +21,7 @@ extern bool unlockGate2;
 extern const int VIEW_HEIGHT2;
 
 int defeatedEnemies2 = 0;
-const int TOTAL_ENEMIES2 = 2;
+const int TOTAL_ENEMIES2 = 4;
 
 
 int attackRoulette() {
