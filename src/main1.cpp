@@ -3,6 +3,7 @@
 
 #include "Level1/Archi_h/mapa.h"
 #include "Level2/Archi2_h/mapa2.h"
+#include "Level3/Archi3_h/mapa3.h"
 
 using namespace std;
 
@@ -44,8 +45,16 @@ int main()
         }
 
         // Si llegamos aquí, el juego ha terminado o se ha completado
-        if (actualLevel > 2) {
-            break; // Salir del bucle principal
+        if (actualLevel == 3)
+        {
+            // Usar las funciones del Nivel 3
+            while (actualLevel == 3)
+            {
+                Nivel3::showHUD_L3();
+                Nivel3::drawView_L3();
+                Nivel3::checkMovement_L3();
+                Sleep(30);
+            }
         }
     }
     return 0;

@@ -21,7 +21,7 @@ extern bool unlockGate2;
 extern const int VIEW_HEIGHT2;
 
 int defeatedEnemies2 = 0;
-const int TOTAL_ENEMIES2 = 4;
+const int TOTAL_ENEMIES2 = 2;
 
 
 int attackRoulette() {
@@ -381,7 +381,7 @@ void bossFight(Boss boss)
     rlutil::cls(); // LIMPIA toda la consola (para que no se vea el combate más)
     cout << "\n\n=====================================================\n";
     cout << "CONGRATULATIONS! You've defeated the final boss.\n";
-    cout << "Redirecting you to the second level...\n";
+    cout << "Redirecting you to the last level...\n";
     cout << "=====================================================\n";
     ::actualLevel = 3;
     player2.level++;
