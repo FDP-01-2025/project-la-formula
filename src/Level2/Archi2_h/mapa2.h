@@ -22,7 +22,7 @@ char map[MAP_HEIGHT2][MAP_WIDTH2 + 1] = {
     "#...............#..#...........#.#........######...######...............####..#",
     "#....T...........#.#..........#...#................######.............####..PPP#",
     "#.................##............#..........T.........................####..P...#",
-    "#.......~~~........#....TTT................T..............................P..PP#",
+    "#.......~~~........#....TTT................T.........H....................P..PP#",
     "#.......~~~................................T..............................P..PP#",
     "#.......................E..................T.........................####..P...#",
     "#.............TTT..................................######.............####..PPP#",
@@ -52,6 +52,13 @@ void movePlayer(int dx, int dy){
 
         if (destiny == '#') return;
 
+        if (destiny == 'H')
+        {
+            player2.hp += player2.hpMax / 2;  //Curar al jugador
+            map[newY][newX] = '.';      //Eliminar el punto de curación
+            if (player2.hp > player2.hpMax) player2.hp = player2.hpMax; //No curar más de lo máximo
+        }
+
         if (destiny == 'E') {
             if (startCombat()) {
                 map[newY][newX] = '.';\
@@ -70,23 +77,14 @@ void movePlayer(int dx, int dy){
             return;
 
     } else if (!bossDefeated2) {
-        bossDefeated2 = true;
-
-        bossFight(secondBoss); 
-
-        // para que todas las P desaparezcan después de la pelea
-        for (int y = 0; y < MAP_HEIGHT2; y++) {
-            for (int x = 0; x < MAP_WIDTH2; x++) {
-                if (map[y][x] == 'P') map[y][x] = '.';
-            }
+        bossFight(secondBoss);
+        
+        // Solo marcar como derrotado si realmente cambió de nivel
+        if (::actualLevel == 3) {
+            bossDefeated2 = true;
         }
-
-        // que el jugador se mueva a la nueva posición
-        playerX2 = newX;
-        playerY2 = newY;
-
+        
         return;
-
         }
     }
 
@@ -127,6 +125,7 @@ void drawView_L2(){
         case 'T': rlutil::setColor(rlutil::GREEN); break;
         case '.': rlutil::setColor(rlutil::BROWN); break;
         case 'E': rlutil::setColor(rlutil::LIGHTBLUE); break;
+        case 'H': rlutil::setColor(rlutil::YELLOW); break;
         case 'P':
         if (unlockGate2)
         rlutil::setColor(rlutil::MAGENTA);

@@ -5,10 +5,10 @@
 namespace Nivel3{
 
 Boss thirdBoss = {    
-    "Glande Asesino",
-    200,
-    200,
-    50,
+    "Glande Asesino",       //NOMBRE DE JEFE  
+    200,                    //HP
+    200,                    //HP MAX
+    50,                     //DANO
     R"(
             ._                                            ,
              (`)..                                    ,.-')

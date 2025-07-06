@@ -16,14 +16,14 @@ char map[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "#...######..............~~~~~.............######..........######..............#",
     "#...#....#................~~~............##....##..............#..............#",
     "#...#....#...............TTT............##....##..............#..............T#",
-    "#...######........................................####........#.........#####.#",
+    "#...######........................................####........#...........#####",
     "#..................................PPPPPPPPP.....#..#........#..............T.#",
     "#....T..........####..............P.........P.....#..#........####......E......#",
     "#...............#..#..............P.........P......................TTT.........#",
     "#.......~~~.....####....TTT.......P.........P.....................#####........#",
     "#.......~~~.......................P.........P........TTT.....................###",
     "#.......................E..........PPPPPPPPP.................................T#",
-    "#.............TTT.........................................................#####",
+    "#.............TTT........................................H................#####",
     "#............................#####............................................#",
     "#....#####....................#T#.............................................#",
     "#....#T.#...............T.....###..................######.....................#",
@@ -50,9 +50,16 @@ void movePlayer(int dx, int dy){
 
         if (destiny == '#') return;
 
+        if (destiny == 'H')
+        {
+            player.hp += player.hpMax / 2;  //Curar al jugador
+            map[newY][newX] = '.';      //Eliminar el punto de curación
+            if (player.hp > player.hpMax) player.hp = player.hpMax; //No curar más de lo máximo
+        }
+
         if (destiny == 'E') {
             if (startCombat()) {
-                map[newY][newX] = '.';\
+                map[newY][newX] = '.';
             }
             return;      //Si no se pone ese return el jugador se estaria moviendo en la pelea 
         } 
@@ -68,23 +75,14 @@ void movePlayer(int dx, int dy){
             return;
 
     } else if (!bossDefeated) {
-        bossDefeated = true;
-
         bossFight(firstBoss);
-
-        // para que todas las P desaparezcan después de la pelea
-        for (int y = 0; y < MAP_HEIGHT; y++) {
-            for (int x = 0; x < MAP_WIDTH; x++) {
-                if (map[y][x] == 'P') map[y][x] = '.';
-            }
+        
+        // Solo marcar como derrotado si realmente cambió de nivel
+        if (::actualLevel == 2) {
+            bossDefeated = true;
         }
-
-        // que el jugador se mueva a la nueva posición
-        playerX = newX;
-        playerY = newY;
-
+        
         return;
-
         }
     }
 
@@ -125,6 +123,7 @@ void drawView(){
         case 'T': rlutil::setColor(rlutil::GREEN); break;
         case '.': rlutil::setColor(rlutil::BROWN); break;
         case 'E': rlutil::setColor(rlutil::LIGHTBLUE); break;
+        case 'H': rlutil::setColor(rlutil::YELLOW); break;
         case 'P':
         if (unlockGate)
         rlutil::setColor(rlutil::MAGENTA);
