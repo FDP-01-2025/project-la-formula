@@ -126,14 +126,14 @@ bool startCombat()
         rlutil::locate(50, y);
         cout << ascii;
 
-        string options[] = {"Atack", "Defend", "Run"};
+        string options[] = {"Atack", "Run"};
         int select = 0;
 
         while (kbhit()) getch();   //  Limpiar teclas residuales ANTES de entrar al menú
 
         while (true) {
             // Mostrar menú
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 locate(10, 16 + i);
                 if (i == select) {
                     setColor(rlutil::YELLOW);
@@ -149,14 +149,14 @@ bool startCombat()
             Sleep(150); // da tiempo a que se suelte la tecla
 
             if (key == rlutil::KEY_UP)
-                select = (select + 2) % 3;
+                select = (select + 2) % 2;
             else if (key == rlutil::KEY_DOWN)
-                select = (select + 1) % 3;
+                select = (select + 1) % 2;
             else if (key == rlutil::KEY_ENTER)
                 break;
         }
 
-         if (select == 0) { // Atacar
+         if (select == 0) {             // Atacar
             
             locate(10, 10);
             cout << "Press ENTER!!";
@@ -167,22 +167,21 @@ bool startCombat()
             cout << "You made " << damage << " damage!";
             Sleep(2000);
         } 
-        else if (select == 1) { // Defender
-            
+
+        else if (select == 1) {        // Huir
+
             locate(10, 12);
-            cout << "You defend yourself!";
-            int reduced = (rand() % 15 + 5) / 2;
-            player2.hp -= reduced;
-            Sleep(1500);
-        } 
-        else if (select == 2) { // Huir
-            
-            locate(5, 12);
             cout << "You try to run...";
             if (rand() % 100 < 40) {
                 cout << " And you made it!";
                 Sleep(1500);
-                break;
+                cls();
+                setColor(rlutil::WHITE); // Restaurar color blanco
+                setColor(rlutil::CYAN);
+                cout << "You escaped from combat.";
+                Sleep(1500);
+                setColor(rlutil::WHITE); // Asegurar que quede en blanco
+                return false; // Retorna false para que el enemigo permanezca en el mapa
             } else {
                 cout << " But you fail!";
                 Sleep(1500);
@@ -291,12 +290,12 @@ void bossFight(Boss boss)
         rlutil::locate(50, y);
         cout << ascii;
 
-        string options[] = {"Atack", "Defend", "Run"};
+        string options[] = {"Atack", "Run"};
         int select = 0;
 
         while (true) {
             // Mostrar menú
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 locate(10, 16 + i);
                 if (i == select) {
                     setColor(rlutil::YELLOW);
@@ -309,14 +308,14 @@ void bossFight(Boss boss)
 
             int key = getkey();
             if (key == rlutil::KEY_UP)
-                select = (select + 2) % 3;
+                select = (select - 1 + 2) % 2;
             else if (key == rlutil::KEY_DOWN)
-                select = (select + 1) % 3;
+                select = (select + 1) % 2;
             else if (key == rlutil::KEY_ENTER)
                 break;
         }
 
-         if (select == 0) { // Atacar
+         if (select == 0) {           // Atacar
             
             locate(10, 10);
             cout << "Press ENTER!";
@@ -327,22 +326,21 @@ void bossFight(Boss boss)
             cout << "You made " << damage << " damage!";
             Sleep(2000);
         } 
-        else if (select == 1) { // Defender
-            
-            locate(10, 12);
-            cout << "You defend yourself!";
-            int reduced = (rand() % 15 + 5) / 2;
-            player2.hp -= reduced;
-            Sleep(1500);
-        } 
-        else if (select == 2) { // Huir
+        
+        else if (select == 1) {         // Huir
             
             locate(10, 12);
             cout << "You try to run...";
             if (rand() % 100 < 40) {
                 cout << " And you made it!";
                 Sleep(1500);
-                break;
+                rlutil::cls();
+                setColor(rlutil::WHITE); // Restaurar color blanco
+                setColor(rlutil::CYAN);
+                cout << "You escaped from the boss fight.";
+                Sleep(1500);
+                setColor(rlutil::WHITE); // Asegurar que quede en blanco
+                return; // Salir de la función sin cambiar de nivel
             } else {
                 cout << " But you fail!";
                 Sleep(1500);
