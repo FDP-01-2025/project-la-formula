@@ -5,7 +5,7 @@
 namespace Nivel1{
 
 Boss firstBoss = {    
-    "ZORG PRIME",
+    "Sir. Draven Zyphnet",
     120,
     120,
     15,

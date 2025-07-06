@@ -35,7 +35,7 @@ char map[MAP_HEIGHT3][MAP_WIDTH3 + 1] = {
     "################################################################################"
 };
 
-Character player3 = {140, 140, 26, 9};  //hp, hpMax, dano, nivel
+Character player3 = {100, 100, 26, 9};  //hp, hpMax, dano, nivel
 int playerX3 = 10, playerY3 = 10;         //el mapa es una matriz de texto, esto ubica al jugador en la posición (10,10).
 bool unlockGate3 = false;        //para desbloquear al boss
 bool bossDefeated3 = false;
