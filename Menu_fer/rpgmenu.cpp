@@ -1,7 +1,7 @@
-
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <windows.h>
 #include "rlutil.h"
 using namespace std;
 
@@ -37,6 +37,7 @@ int colorear(char c)
         return rlutil::DARKGREY;
     }
 }
+
 
 void crearArchivoArte()
 {
@@ -243,7 +244,13 @@ void menuInteractivo(const char *nombreArchivo)
 
 int main()
 {
+    
+
     crearArchivoArte();
+    // 🔊 Inicia la música de fondo
+    if (!PlaySoundA("MenuSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP)) {
+        cerr << "❌ No se pudo reproducir el archivo musiquitas.wav\n";
+    }
     crearArchivoArte2();
 
     mostrarArchivo("arte.txt");
@@ -252,6 +259,9 @@ int main()
 
     menuInteractivo("arte2.txt");
     cin.get();
+
+    // 🛑 Detener música al salir completamente del programa
+    PlaySoundA(NULL, NULL, 0);
 
     return 0;
 }
