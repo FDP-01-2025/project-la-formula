@@ -189,7 +189,8 @@ bool startCombat()
         rlutil::cls();
         setColor(rlutil::RED);
         cout << "You have been defeated. GAME OVER.\n";
-        system("pause"); // Espera a que el jugador presione una tecla
+        cout << "Press any key to exit...";
+        getch();
         exit(0);         // Este se usa para terminar el programa de un solo, puede ser utilizado para una opcion salir del juego
     }
 
@@ -356,7 +357,8 @@ void bossFight(Boss boss)
         rlutil::cls();
         setColor(rlutil::RED);
         cout << "You have been defeated by the boss. GAME OVER.\n";
-        system("pause");
+        cout << "Press any key to exit...";
+        getch();
         exit(0);
     }
 
@@ -370,7 +372,8 @@ void bossFight(Boss boss)
     player.dmg += 2;
     player.hp = player.hpMax;
     Sleep(4000);
-    system("pause");
+    cout << "Press any key to continue...";
+    getch();
 }
 
 }

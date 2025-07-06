@@ -20,8 +20,8 @@ char map[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "#...#######........................PPPPPPPPP.....#..#........#..............T.#",
     "#....T..........####..............P.........P.....#..#........####......E......#",
     "#...............#..#..............P.........P......................TTT.........#",
-    "#.......~~~.....####....TTT.......P.........P.....................#####........#",
-    "#.......~~~.......................P.........P........TTT.....................###",
+    "#...............####....TTT.......P.........P.....................#####........#",
+    "#.................................P.........P........TTT.....................###",
     "#.......................E..........PPPPPPPPP.................................T#",
     "#.............TTT........................................H................#####",
     "#............................#####............................................#",
@@ -52,8 +52,8 @@ void movePlayer(int dx, int dy){
 
         if (destiny == '~') return;  //No se puede mover al agua
 
-        if(destiny == 'N') {                            //NPC interactivo
-            
+        if(destiny == 'N') {        //NPC interactivo
+
             // Limpiar el buffer de teclas antes de entrar al menú
             while (kbhit()) getch();
             
@@ -99,12 +99,12 @@ void movePlayer(int dx, int dy){
             cout << "==================== NPC CONVERSATION ====================";
             rlutil::setColor(rlutil::WHITE);
             
-            if (select == 0) { // "Yes, I know him."
+            if (select == 0) { 
                 rlutil::locate(10, 7);
                 cout << "Mysterious NPC: \"Good! Then you know how dangerous he is.\"";
                 rlutil::locate(10, 9);
                 cout << "\"You must defeat him to save our city from destruction!\"";
-            } else { // "No, who is he?"
+            } else { 
                 rlutil::locate(10, 7);
                 cout << "Mysterious NPC: \"Draven is the leader of ZORG PRIME corporation,\"";
                 rlutil::locate(10, 9);

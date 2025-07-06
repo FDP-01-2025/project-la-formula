@@ -16,15 +16,15 @@ char map[MAP_HEIGHT2][MAP_WIDTH2 + 1] = {
     "################################################################################",
     "#......................~~~~~~.........T............######~~~~~~~~~~~~~~~~~~~~~#",
     "#...######..............~~~~~.............######...######~~~~~~~~~~~~~~~~~~~~~#",
-    "#...######.........#......~~~............##....##..######~~~~~~~~~~~~~~~~~~~~~#",
-    "#...######........##.....TTT............##.....##..######....................##",
-    "#...######.......#.#............#........##....##..######..................####",
+    "#...######.........#......~~~...........##.....##..######~~~~~~~~~~~~~~~~~~~~~#",
+    "#...######........##.....TTT............E...N..##..######....................##",
+    "#...######.......#.#............#.......##.....##..######..................####",
     "#...............#..#...........#.#........######...######...............####..#",
     "#....T...........#.#..........#...#................######.............####..PPP#",
     "#.................##............#..........T.........................####..P...#",
     "#.......~~~........#....TTT................T.........H....................P..PP#",
     "#.......~~~................................T..............................P..PP#",
-    "#.......................E..................T.........................####..P...#",
+    "#..........................................T.........................####..P...#",
     "#.............TTT..................................######.............####..PPP#",
     "#............................#####.................######...............####..#",
     "#....#####....................#T#.......######.....######..................####",
@@ -51,6 +51,86 @@ void movePlayer(int dx, int dy){
         char destiny = map[newY][newX];  //Se obtiene el carácter que hay en el mapa en la posición nueva.
 
         if (destiny == '#') return;
+
+        if (destiny == '~') return;  //No se puede mover al agua
+
+        if(destiny == 'N'){
+            // Limpiar el buffer de teclas antes de entrar al menú
+            while (kbhit()) getch();
+            
+            rlutil::cls(); // Limpiar toda la pantalla
+            rlutil::setColor(rlutil::CYAN);
+            rlutil::locate(10, 5);
+            cout << "==================== NPC CONVERSATION ====================";
+            rlutil::setColor(rlutil::WHITE);
+            
+            rlutil::locate(10, 7);
+            cout << "Mysterious NPC: \"Have you ever heard about Draven?\"";
+            
+            string options[] = {"Yes, I know him.", "No, who is he?"};
+            int select = 0;
+            
+            while (true) {
+                // Mostrar menú
+                for (int i = 0; i < 2; i++) {
+                    rlutil::locate(10, 9 + i);
+                    if (i == select) {
+                        rlutil::setColor(rlutil::YELLOW);
+                        cout << "> " << options[i];
+                    } else {
+                        rlutil::setColor(rlutil::WHITE);
+                        cout << "  " << options[i];
+                    }
+                }
+                
+                int key = getkey();
+                while (kbhit()) getch(); // Limpiar teclas residuales
+                
+                if (key == rlutil::KEY_UP)
+                    select = (select - 1 + 2) % 2;
+                else if (key == rlutil::KEY_DOWN)
+                    select = (select + 1) % 2;
+                else if (key == rlutil::KEY_ENTER)
+                    break;
+            }
+            
+            rlutil::cls(); // Limpiar para mostrar respuesta
+            rlutil::setColor(rlutil::CYAN);
+            rlutil::locate(10, 5);
+            cout << "==================== NPC CONVERSATION ====================";
+            rlutil::setColor(rlutil::WHITE);
+            
+            if (select == 0) { // "Yes, I know him."
+                rlutil::locate(10, 7);
+                cout << "Mysterious NPC: \"Good! Then you know how dangerous he is.\"";
+                rlutil::locate(10, 9);
+                cout << "\"You must defeat him to save our city from destruction!\"";
+            } else { // "No, who is he?"
+                rlutil::locate(10, 7);
+                cout << "Mysterious NPC: \"Draven is the leader of ZORG PRIME corporation,\"";
+                rlutil::locate(10, 9);
+                cout << "\"a powerful and dangerous organization that controls this zone.\"";
+                rlutil::locate(10, 11);
+                cout << "\"He is responsible for the destruction of our city.\"";
+                rlutil::locate(10, 13);
+                cout << "\"You must defeat him to save everyone!\"";
+            }
+            
+            rlutil::locate(10, 16);
+            rlutil::setColor(rlutil::YELLOW);
+            cout << "Press any key to continue...";
+            rlutil::setColor(rlutil::WHITE);
+            
+            // Limpiar teclas residuales antes de esperar
+            while (kbhit()) getch();
+            getch(); // Esperar a que el jugador presione una tecla
+            
+            // Limpiar completamente la pantalla antes de volver al juego
+            rlutil::cls();
+            
+            return; // No mover al jugador a la posición del NPC
+        }
+
 
         if (destiny == 'H')
         {
