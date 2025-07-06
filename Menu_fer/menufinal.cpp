@@ -153,6 +153,19 @@ void mostrarTextoAnimadoEnPosicion(const string &texto, int x, int y, int delayM
     }
 }
 
+void mostrarMensajeFelicitacion()
+{
+    // Coordenadas para la caja y texto (ajusta si quieres moverla)
+    int cajaX = 33;
+    int cajaY = 25;
+    string mensaje = "Congratulations on beating the game. Starting summary...";
+    int anchoCaja = (int)mensaje.size() + 4; // espacio para bordes y márgenes
+    int altoCaja = 3;
+
+    dibujarCaja(cajaX, cajaY, anchoCaja, altoCaja);
+    mostrarTextoAnimadoEnPosicion(mensaje, cajaX + 2, cajaY + 1, 60);
+}
+
 void mostrarCinematicaFinal()
 {
     rlutil::cls();
@@ -199,15 +212,7 @@ int main()
     crearArchivoArte();
     mostrarArchivoArte("arte.txt");
 
-    // Coordenadas para la caja y texto (ajusta si quieres moverla)
-    int cajaX = 33;
-    int cajaY = 25;
-    string mensaje = "Congratulations on beating the game. Starting summary...";
-    int anchoCaja = (int)mensaje.size() + 4; // espacio para bordes y márgenes
-    int altoCaja = 3;
-
-    dibujarCaja(cajaX, cajaY, anchoCaja, altoCaja);
-    mostrarTextoAnimadoEnPosicion(mensaje, cajaX + 2, cajaY + 1, 60);
+    mostrarMensajeFelicitacion();
 
     rlutil::msleep(3000); // espera 3 segundos
 
