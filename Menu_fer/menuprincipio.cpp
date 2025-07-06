@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -39,22 +38,87 @@ int colorear(char c)
     }
 }
 
-
-void crearArchivoArte()
+// Función para calcular el ancho visual de una cadena UTF-8
+int visualWidth(const char *str)
 {
-    ofstream archivo("arte.txt");
-    if (!archivo)
-        return;
+    int width = 0;
+    for (int i = 0; str[i] != '\0';)
+    {
+        width++;
+        // Avanzar al siguiente caracter UTF-8
+        if ((str[i] & 0x80) == 0)
+        { // ASCII
+            i += 1;
+        }
+        else if ((str[i] & 0xE0) == 0xC0)
+        {
+            i += 2;
+        }
+        else if ((str[i] & 0xF0) == 0xE0)
+        {
+            i += 3;
+        }
+        else if ((str[i] & 0xF8) == 0xF0)
+        {
+            i += 4;
+        }
+        else
+        {
+            i += 1; // Caracter inválido, avanzar 1
+        }
+    }
+    return width;
+}
 
-    const char *lineas[] = {
-        "",
-    };
+void mostrarLogo()
+{
+    const char *logo[] = {
+        " █████╗     ███████╗    ████████╗    ███████╗    ██████╗     ███╗   ███╗     █████╗     ████████╗    ██╗  ██╗",
+        "██╔══██╗    ██╔════╝    ╚══██╔══╝    ██╔════╝    ██╔══██╗    ████╗ ████║    ██╔══██╗    ╚══██╔══╝    ██║  ██║",
+        "███████║    █████╗         ██║       █████╗      ██████╔╝    ██╔████╔██║    ███████║       ██║       ███████║",
+        "██╔══██║    ██╔══╝         ██║       ██╔══╝      ██╔══██╗    ██║╚██╔╝██║    ██╔══██║       ██║       ██╔══██║",
+        "██║  ██║    ██║            ██║       ███████╗    ██║  ██║    ██║ ╚═╝ ██║    ██║  ██║       ██║       ██║  ██║",
+        "╚═╝  ╚═╝    ╚═╝            ╚═╝       ╚══════╝    ╚═╝  ╚═╝    ╚═╝     ╚═╝    ╚═╝  ╚═╝       ╚═╝       ╚═╝  ╚═╝"};
+    int num_lines = sizeof(logo) / sizeof(logo[0]);
+    int max_len = visualWidth(logo[0]);
+    int startY = 15;
+    int startX = (rlutil::tcols() - max_len) / 2;
 
-    for (const char *linea : lineas)
-        archivo << linea << "\n";
+    for (int i = 0; i < num_lines; ++i)
+    {
+        rlutil::locate(startX, startY + i);
+        const char *line = logo[i];
+        for (int j = 0; line[j] != '\0';)
+        {
+            int char_bytes = 1;
+            if ((line[j] & 0x80) == 0)
+            { // ASCII
+                char_bytes = 1;
+            }
+            else if ((line[j] & 0xE0) == 0xC0)
+            {
+                char_bytes = 2;
+            }
+            else if ((line[j] & 0xF0) == 0xE0)
+            {
+                char_bytes = 3;
+            }
+            else if ((line[j] & 0xF8) == 0xF0)
+            {
+                char_bytes = 4;
+            }
 
-    archivo.close();
-    rlutil::hidecursor;
+            // Imprimir el caracter (todos sus bytes)
+            for (int k = 0; k < char_bytes; ++k)
+            {
+                cout << line[j + k];
+            }
+            cout.flush();
+            j += char_bytes;
+
+            rlutil::msleep(5); // Ajustar para la velocidad deseada
+        }
+    }
 }
 
 void crearArchivoArte2()
@@ -64,24 +128,19 @@ void crearArchivoArte2()
         return;
 
     const char *lineas[] = {
-        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
-        "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |          M E N U           | |",
-        "._              ___%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |----------------------------| |",
-        ".*' .*        _.-*\".*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        "(   (       .-' .' (    __%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |   [1] New game             | |",
-        " .   `-._.-*   /    `-*'  `*-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |   [2] Continue game        | |",
-        "-._.*        _.-'        .-.    `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |   [3] Exit                 | |",
-        "          .-'         _.'   `-._   `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        "\\       .'                      `*-.__`-._%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |----------------------------| |",
-        "    _.._    /       -.                \"\"\";%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |    Use W S to move         | |",
-        ".'-._ `. :   :      `.         :      `+.    ;%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        "/     `. \\:    \\           `-.   \\ `-.    \\%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        ":        \\ ;  \\  ;    `. `.    \\   `.__\\;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |    ENTER to confirm        | |",
-        "          ;;   ;     `-.  \\ _.-:*\"'   `:`._:%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
+        " .   `-._.-*   /    `-*'  `*-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
+        "-._.*        _.-'        .-.    `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |          M E N U           | |",
+        "          .-'         _.'   `-._   `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |----------------------------| |",
+        "\\       .'                      `*-.__`-._%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
+        "    _.._    /       -.                \"\"\\;%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |   [1] New game             | |",
+        ".'-._ `. :   :      `.         :      `+.    ;%%%%%%%%%%%%%%%%%%%%%%%%| |   [2] Continue game        | |",
+        "/     `. \\:    \\           `-.   \\ `-.    \\%%%%%%%%%%%%%%%%%%%%%%%%%%%| |   [3] Exit                 | |",
+        ":        \\ ;  \\  ;    `. `.    \\   `.__\\;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
+        "          ;;   ;     `-.  \\ _.-:*\"'   `:`._:%%%%%%%%%%%%%%%%%%%%%%%%%%| |----------------------------| |",
         "       .-*:  ' :   \\    ;;-*'\"*.       .-,%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        "      '   :  ; ;   /:.-'        `        ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
+        "      '   :  ; ;   /:.-'        `        ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |    Use W S to move         | |",
         "          ; /     :     _.--s+.        .s:%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        ":        / :  :   ;    \\   dPT$b.    \\d$PTb%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
+        ":        / :  :   ;    \\   dPT$b.    \\d$PTb%%%%%%%%%%%%%%%%%%%%%%%%%%%| |    ENTER to confirm        | |",
         "\\     .'  ;  ;   ;     `.:$bd$$$b    `Tbd$%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
         " `._.'   /  /    :       `*^^^^*' ,    `T$%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
         " .-'    : .'      \\                      `-._%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
@@ -97,10 +156,6 @@ void crearArchivoArte2()
         "               :   `.                       ;%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
         "         '     ;     `-.                    :%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
         "        /;     :        `---..._______...--*'%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        "     .-'/`      \\            /%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        "   .'  /  \\      `._        :%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        "  /  .'    `.   .-*'        ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
-        " :  :        \\   \\         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
         " ;  ;         ;   ;        :%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
     };
 
@@ -144,80 +199,82 @@ void menuInteractivo(const char *nombreArchivo)
     int key;
     rlutil::hidecursor();
 
-    mostrarArchivo(nombreArchivo); 
-    rlutil::locate(75, 4 + i);
-    cout << (char)175;
- 
+    mostrarArchivo(nombreArchivo);
+    // Ajustamos la posición inicial del selector
+    rlutil::locate(75, 5 + i);
+    cout << '>'; // Usamos un carácter más compatible
+
     do
     {
         key = rlutil::getkey();
 
-        
-        rlutil::locate(75, 4 + i);
+        // Borramos el selector anterior
+        rlutil::locate(75, 5 + i);
         cout << " ";
 
         switch (key)
         {
-        case 119: 
-        case 87:
+        case 'w': // Usamos 'w' y 's' para que sea más intuitivo
+        case 'W':
             i--;
-            if (i < 0) i = 0;
+            if (i < 0)
+                i = 0;
             break;
 
-        case 115: 
-        case 83:
+        case 's':
+        case 'S':
             i++;
-            if (i > 2) i = 2;
+            if (i > 2)
+                i = 2;
             break;
         }
 
-        
-        rlutil::locate(75, 4 + i);
-        cout << (char)175;
+        // Dibujamos el nuevo selector
+        rlutil::locate(75, 5 + i);
+        cout << '>';
 
     } while (key != rlutil::KEY_ENTER);
     switch (i)
     {
     case 2:
-        cout<<"la aventura puede esperar...";
+        cout << "la aventura puede esperar...";
         rlutil::msleep(1500);
         exit(0);
         break;
     case 1:
-    cout<<"cargando partida...";
-    rlutil::msleep(1500);
-    
-    break;
+        cout << "cargando partida...";
+        rlutil::msleep(1500);
+
+        break;
     case 0:
-    cout<<"la aventura apenas empieza";
-    rlutil::msleep(1500);
-    break;
-    
+        cout << "la aventura apenas empieza";
+        rlutil::msleep(1500);
+        break;
+
     default:
         break;
     }
 
     rlutil::resetColor();
     rlutil::cls();
-    
 }
-
 
 int main()
 {
+    SetConsoleOutputCP(CP_UTF8);
     // 🔊 Inicia la música de fondo
-    if (!PlaySoundA("MenuSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP)) {
+    if (!PlaySoundA("MenuSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP))
+    {
         cerr << "❌ No se pudo reproducir el archivo musiquitas.wav\n";
     }
+    mostrarLogo();
 
-    crearArchivoArte();
-    crearArchivoArte2();
-
-    mostrarArchivo("arte.txt");
-    cin.ignore();
+    rlutil::msleep(5000);
     rlutil::cls();
 
+    crearArchivoArte2();
     menuInteractivo("arte2.txt");
+    remove("arte2.txt");
     cin.get();
 
     // 🛑 Detener música al salir completamente del programa
