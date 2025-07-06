@@ -1,4 +1,3 @@
-
 #include <iostream>  // Entrada/salida estándar
 #include <fstream>   // Manejo de archivos
 #include <cstring>   // Funciones de cadenas C
@@ -231,16 +230,16 @@ void menuInteractivo(const char *nombreArchivo)
     switch (i)
     {
     case 2:
-        cout << "la aventura puede esperar...";
+        cout << "The adventure can wait...";
         rlutil::msleep(1500);
         exit(0);
         break;
     case 1:
-        cout << "cargando partida...";
+        cout << "Loading game...";
         rlutil::msleep(1500);
         break;
     case 0:
-        cout << "la aventura apenas empieza";
+        cout << "Rhe adventure begins!...";
         rlutil::msleep(1500);
         break;
     default:
