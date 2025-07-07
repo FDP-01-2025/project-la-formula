@@ -253,10 +253,10 @@ void menuInteractivo(const char *nombreArchivo)
 int main()
 {
     SetConsoleOutputCP(CP_UTF8); // Soporte UTF-8 en consola
-    // 🔊 Inicia la música de fondo en loop
+    //  Inicia la música de fondo en loop
     if (!PlaySoundA("MenuSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP))
     {
-        cerr << "❌ No se pudo reproducir el archivo musiquitas.wav\n";
+        cerr << " No se pudo reproducir el archivo musiquitas.wav\n";
     }
     mostrarLogo();                // Muestra el logo animado
     rlutil::msleep(5000);         // Espera 5 segundos
@@ -265,7 +265,7 @@ int main()
     menuInteractivo("arte2.txt"); // Muestra menú interactivo
     remove("arte2.txt");          // Borra archivo temporal
     cin.get();                    // Espera entrada
-    // 🛑 Detener música al salir completamente del programa
+    //  Detener música al salir completamente del programa
     PlaySoundA(NULL, NULL, 0);
     return 0;
 }
