@@ -69,6 +69,8 @@ int main()
             }
         }
 
+        cls();
+
         if(actualLevel == 2)
         {
             // Usar las funciones del Nivel 2
@@ -80,6 +82,8 @@ int main()
                 Sleep(30);
             }
         }
+
+        cls();  
 
         // Si llegamos aquí, el juego ha terminado o se ha completado
         if (actualLevel == 3)
@@ -94,7 +98,7 @@ int main()
             }
         }
         
-        // ¡JUEGO COMPLETADO! Mostrar pantalla final
+        // Mostrar pantalla final
         if (actualLevel == 4)
         {
             FinalScreen::showFinalScreen();

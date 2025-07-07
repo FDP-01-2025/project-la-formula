@@ -21,7 +21,7 @@ extern bool unlockGate2;
 extern const int VIEW_HEIGHT2;
 
 int defeatedEnemies2 = 0;
-const int TOTAL_ENEMIES2 = 2;
+const int TOTAL_ENEMIES2 = 3;
 
 
 int attackRoulette() {
@@ -57,7 +57,7 @@ int attackRoulette() {
     else if ((position >= 10 && position <= 12) || (position >= 17 && position <= 19))
         return rand() % player2.dmg + 15; // amarillo
     else
-        return rand() % player2.dmg + 5;  // rojo
+        return rand() % player2.dmg / 2;  // rojo
 }
 
 
@@ -360,7 +360,7 @@ void bossFight(Boss boss)
 
         if (!showMessage && boss.hp <= boss.hpMax / 2)
         {
-            rlutil::locate(62, 4); // Línea adecuada que no tape nada
+            rlutil::locate(72, 4); // Línea adecuada que no tape nada
             cout << boss.name << ": \"DIEEE!!!\"";
             showMessage = true;
 
@@ -380,7 +380,7 @@ void bossFight(Boss boss)
 
     rlutil::cls(); // LIMPIA toda la consola (para que no se vea el combate más)
     cout << "\n\n=====================================================\n";
-    cout << "CONGRATULATIONS! You've defeated the final boss.\n";
+    cout << "CONGRATULATIONS! You've defeated the second boss.\n";
     cout << "Redirecting you to the last level...\n";
     cout << "=====================================================\n";
     ::actualLevel = 3;
