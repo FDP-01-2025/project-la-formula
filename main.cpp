@@ -3,6 +3,8 @@
 
 #include "src/mainmenu.h"
 #include "src/finalscreen.h"
+#include "src/MenuPausa/pauseMenu.h"
+#include "src/MenuPausa/loadGame.h"  // Para la función loadGame()
 #include "src/Level1/Archi_h/mapa.h"
 #include "src/Level2/Archi2_h/mapa2.h"
 #include "src/Level3/Archi3_h/mapa3.h"
@@ -32,17 +34,13 @@ int main()
     switch(menuSelection)
     {
         case 0: // New Game
-            // Pedir al jugador que ingrese su nombre
             MainMenu::playerName = MainMenu::getPlayerName();
+            actualLevel = 1; // Empezar desde el nivel 1
             break;
         case 1: // Continue Game
-            // Por ahora, actuar como New Game (puede implementarse save/load después)
-            rlutil::cls();
-            rlutil::locate(40, 12);
-            cout << "Continue feature not yet implemented. Starting new game...";
-            rlutil::msleep(2000);
-            // También pedir nombre para continue
-            MainMenu::playerName = MainMenu::getPlayerName();
+            if (!MainMenu::handleContinueGame()) {
+                actualLevel = 1; // Si no se pudo cargar, empezar desde nivel 1
+            }
             break;
         case 2: // Exit
             MainMenu::stopMusic();
@@ -98,6 +96,8 @@ int main()
             }
         }
         
+        cls();
+
         // Mostrar pantalla final
         if (actualLevel == 4)
         {
