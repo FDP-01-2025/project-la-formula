@@ -6,7 +6,7 @@
 #include <cstring>
 #include <windows.h>
 #include <mmsystem.h>       // Para PlaySound
-#include "Level1/Archi_h/rlutil.h"
+#include "../Level1/Archi_h/rlutil.h"
 
 using namespace std;
 
