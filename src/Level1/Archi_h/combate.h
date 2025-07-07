@@ -14,10 +14,10 @@ using namespace rlutil;
 namespace Nivel1{
 
 int defeatedEnemies = 0;
-const int TOTAL_ENEMIES = 4;
+const int TOTAL_ENEMIES = 2;
 
 
-int attackRoulette() {
+int attackRoulette() {  
     int position = 0;
     const int max = 30;
 
@@ -50,7 +50,7 @@ int attackRoulette() {
     else if ((position >= 10 && position <= 12) || (position >= 17 && position <= 19))
         return rand() % player.dmg + 15; // amarillo
     else
-        return rand() % player.dmg + 5;  // rojo
+        return rand() % player.dmg / 2;  // rojo
 }
 
 
@@ -344,7 +344,7 @@ void bossFight(Boss boss)
 
         if (!showMessage && boss.hp <= boss.hpMax / 2)
         {
-            rlutil::locate(62, 4); // Línea adecuada que no tape nada
+            rlutil::locate(72, 4); // Línea adecuada que no tape nada
             cout << boss.name << ": \"I will kill you!!!\"";
             showMessage = true;
 
@@ -364,7 +364,7 @@ void bossFight(Boss boss)
 
     rlutil::cls(); // LIMPIA toda la consola (para que no se vea el combate más)
     cout << "\n\n=====================================================\n";
-    cout << "CONGRATULATIONS! You've defeated the final boss.\n";
+    cout << "CONGRATULATIONS! You've defeated the first boss.\n";
     cout << "Redirecting you to the second level...\n";
     cout << "=====================================================\n";
     ::actualLevel = 2;

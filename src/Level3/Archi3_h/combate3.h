@@ -57,7 +57,7 @@ int attackRoulette() {
     else if ((position >= 10 && position <= 12) || (position >= 17 && position <= 19))
         return rand() % player3.dmg + 15; // amarillo
     else
-        return rand() % player3.dmg + 5;  // rojo
+        return rand() % player3.dmg /2;  // rojo
 }
 
 
@@ -69,7 +69,7 @@ bool startCombat()
         "IRON PROTOCOL", // Name
         100,             // Hp
         100,             // hpMax
-        1,              // dano
+        20,              // dano
         R"(    
                      ,-~  - ^^~-.,
                  ,^        -,____ ^,         ,/\/\/\,
@@ -358,7 +358,7 @@ void bossFight(Boss boss)
 
         if (!showMessage && boss.hp <= boss.hpMax / 2)
         {
-            rlutil::locate(62, 4); // Línea adecuada que no tape nada
+            rlutil::locate(72, 4); // Línea adecuada que no tape nada
             cout << boss.name << ": \"You cant kill me!!!\"";
             showMessage = true;
 
@@ -377,10 +377,15 @@ void bossFight(Boss boss)
     }
 
     rlutil::cls(); // LIMPIA toda la consola (para que no se vea el combate más)
+     
+    cout << "\n\n=====================================================\n";
+    cout << "CONGRATULATIONS! You've defeated the final boss.\n";
+    cout << "Redirecting you to the final screen...\n";
+    cout << "=====================================================\n";
     player3.level++;
     player3.dmg += 2;
     
-    // ¡JUEGO COMPLETADO! Cambiar a nivel 4 para activar la pantalla final
+    // Cambiar a nivel 4 para activar la pantalla final
     ::actualLevel = 4;
     
     Sleep(4000);
