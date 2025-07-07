@@ -1,28 +1,28 @@
-# Proyecto de C++ - [Nombre del Juego]
+# Proyecto de C++ - [AFTERMATH]
 
 ## Descripción del Proyecto
 
-Breve descripción del juego, su propósito, cómo se juega y cualquier otro detalle importante que describa la idea general del proyecto.
+Este proyecto consiste en un juego de aventuras de género RPG, el cual el jugador podrá explorar 3 mapas, cada mapa tiene sus propios enemigos y diferentes bosses los cuales se deben de derrotar para avanzar, en los combates hay 2 opciones, atacar y huir, y esta última precisamente se hizo con el objetivo de que busques curarte o guardar partida. El juego utiliza estructuras de control como `if`, `switch`, y bucles `while` y `for` para generar interacciones dinámicas.
 
-**Por ejemplo:**
-Este proyecto consiste en un juego de aventuras donde el jugador debe explorar un mundo virtual, recoger objetos, resolver acertijos y enfrentar enemigos. El juego utiliza estructuras de control como `if`, `switch`, y bucles `while` y `for` para generar interacciones dinámicas.
 
 ## Equipo
 
-- **Nombre del equipo:** [Nombre del equipo]
+- **Nombre del equipo:** La formula
 
 ### Integrantes del equipo
 
-1. **Nombre completo:** [Nombre del estudiante 1]  
-   **Carnet:** [Carnet del estudiante 1]
+1. **Nombre completo:** Ángel Gabriel Piche Martínez  
+   **Carnet:** 00184725
 
-2. **Nombre completo:** [Nombre del estudiante 2]  
-   **Carnet:** [Carnet del estudiante 2]
+2. **Nombre completo:** Fernando José Rivas Henríquez  
+   **Carnet:** 00154325
 
-3. **Nombre completo:** [Nombre del estudiante 3]  
-   **Carnet:** [Carnet del estudiante 3]
+3. **Nombre completo:** Axel Moises Merino Cabrera  
+   **Carnet:** 00071425
 
-(Agregar más integrantes si es necesario)
+3. **Nombre completo:** David Alejandro Morán Jiménez  
+   **Carnet:** 00201825
+
 
 ## Instrucciones de Ejecución
 
