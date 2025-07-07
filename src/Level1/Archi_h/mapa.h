@@ -4,8 +4,9 @@
 #include <windows.h>  // Para GetAsyncKeyState() y GetTickCount()
 #include "Structs.h"
 #include "combate.h"
-#include "../../mainmenu.h"
 #include "../../MenuPausa/pauseMenu.h"
+#include "../../MenuStart_End/finalscreen.h"
+#include "../../MenuStart_End/mainmenu.h"
 
 namespace Nivel1{
 const int MAP_WIDTH = 80;    //ancho de mapa

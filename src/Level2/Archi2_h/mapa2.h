@@ -5,8 +5,9 @@
 #include "../../Level1/Archi_h/Structs.h"
 #include "combate2.h"
 #include "temporal2.h"
-#include "../../mainmenu.h"
 #include "../../MenuPausa/pauseMenu.h"
+#include "../../MenuStart_End/finalscreen.h"
+#include "../../MenuStart_End/mainmenu.h"
 
 namespace Nivel2{
 

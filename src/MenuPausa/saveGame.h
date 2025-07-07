@@ -5,7 +5,8 @@
 #include <fstream>
 #include <string>
 #include "../Level1/Archi_h/Structs.h"  // Para la definición de Character
-#include "../mainmenu.h"  // Para acceder al nombre del jugador
+#include "../MenuStart_End/finalscreen.h"
+#include "../MenuStart_End/mainmenu.h"
 
 using namespace std;
 
