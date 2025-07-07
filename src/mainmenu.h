@@ -300,9 +300,8 @@ void createMenuArtFile()
     menuFile.close();
 }
 
-<<<<<<< HEAD
-// Función para manejar la carga de juego guardado
-// Retorna true si se cargó exitosamente, false si hay que empezar juego nuevo
+// Function to handle loading saved game
+// Returns true if loaded successfully, false if should start new game
 bool handleContinueGame() {
     rlutil::cls();
     rlutil::locate(30, 12);
@@ -310,34 +309,29 @@ bool handleContinueGame() {
     rlutil::msleep(1000);
     
     if (::loadGame()) {
-        // El juego se cargó exitosamente
+        // Game loaded successfully
         rlutil::locate(30, 14);
         cout << "Game loaded! Returning to level " << ::actualLevel;
         rlutil::msleep(2000);
         return true;
     } else {
-        // No hay archivo de guardado, empezar juego nuevo
+        // No save file found, start new game
         rlutil::locate(30, 14);
         cout << "No saved game found. Starting new game...";
         rlutil::msleep(2000);
         playerName = getPlayerName();
-        return false;  // Indica que hay que empezar desde nivel 1
+        return false;  // Indicates should start from level 1
     }
 }
 
-// Muestra el menú interactivo y permite seleccionar una opción con W/S
-// Retorna: 0 = New Game, 1 = Continue, 2 = Exit
-int menuInteractivo(const char *nombreArchivo)
-=======
-// Displays the interactive menu and allows option selection with W/S
+// Shows the interactive menu and allows selecting an option with W/S
 // Returns: 0 = New Game, 1 = Continue, 2 = Exit
-int interactiveMenu(const string& fileName)
->>>>>>> d00d73cda4f70c92c28957d3cd79380b9b52de91
+int interactiveMenu(const char *fileName)
 {
     int selectedOption = 0; // Selected option
     int key;
     rlutil::hidecursor();
-    displayFile(fileName);
+    displayFile(string(fileName)); // Convert const char* to string
     
     // Initial position of the selector
     rlutil::locate(75, 5 + selectedOption);
@@ -411,9 +405,8 @@ int showMainMenu()
     rlutil::msleep(3000);         // Wait 3 seconds
     rlutil::cls();                // Clear screen
     createMenuArtFile();          // Create the menu arte2.txt
-    string menuFile = "arte2.txt";
-    int selection = interactiveMenu(menuFile); // Display interactive menu
-    remove(menuFile.c_str());     // Delete temporary file (c_str() for compatibility with remove)
+    int selection = interactiveMenu("arte2.txt"); // Display interactive menu
+    remove("arte2.txt");          // Delete temporary file
     
     return selection;
 }
