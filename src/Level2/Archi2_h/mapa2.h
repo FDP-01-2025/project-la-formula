@@ -4,6 +4,7 @@
 #include "../../Level1/Archi_h/Structs.h"
 #include "combate2.h"
 #include "temporal2.h"
+#include "../../mainmenu.h"
 
 namespace Nivel2{
 
@@ -65,7 +66,7 @@ void movePlayer(int dx, int dy){
             rlutil::setColor(rlutil::WHITE);
             
             rlutil::locate(10, 7);
-            cout << "Mysterious NPC: \"Have you ever heard about Draven?\"";
+            cout << "Mysterious NPC: \"Have you ever heard about Seraphim?\"";
             
             string options[] = {"Yes, I know him.", "No, who is he?"};
             int select = 0;
@@ -107,11 +108,11 @@ void movePlayer(int dx, int dy){
                 cout << "\"You must defeat him to save our city from destruction!\"";
             } else { // "No, who is he?"
                 rlutil::locate(10, 7);
-                cout << "Mysterious NPC: \"Draven is the leader of ZORG PRIME corporation,\"";
+                cout << "Mysterious NPC: \"Seraphim and Adam killed everyone,\"";
                 rlutil::locate(10, 9);
-                cout << "\"a powerful and dangerous organization that controls this zone.\"";
+                cout << "\"Few years ago, Adam saw potencial in Seraphim and now he wants to lead Arasaka.\"";
                 rlutil::locate(10, 11);
-                cout << "\"He is responsible for the destruction of our city.\"";
+                cout << "\"He is waiting for you on the bridge, be carefull.\"";
                 rlutil::locate(10, 13);
                 cout << "\"You must defeat him to save everyone!\"";
             }
@@ -206,6 +207,7 @@ void drawView_L2(){
         case '.': rlutil::setColor(rlutil::BROWN); break;
         case 'E': rlutil::setColor(rlutil::LIGHTBLUE); break;
         case 'H': rlutil::setColor(rlutil::YELLOW); break;
+        case 'N': rlutil::setColor(rlutil::BLUE); break;
         case 'P':
         if (unlockGate2)
         rlutil::setColor(rlutil::MAGENTA);
@@ -260,6 +262,8 @@ void checkMovement_L2(){
 void showHUD_L2(){
 
     rlutil::locate(1, 1);
+    rlutil::setColor(rlutil::LIGHTCYAN);
+    cout << "Player: " << MainMenu::playerName << "  ";
     rlutil::setColor(rlutil::WHITE);
     cout << "XP Level: " << player2.level << "   Damage: " << player2.dmg << "   HP: " << player2.hp << "    ";
 

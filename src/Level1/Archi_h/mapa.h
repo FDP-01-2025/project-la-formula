@@ -3,12 +3,13 @@
  
 #include "Structs.h"
 #include "combate.h"
+#include "../../mainmenu.h"
 
 namespace Nivel1{
 const int MAP_WIDTH = 80;    //ancho de mapa
 const int MAP_HEIGHT = 20;   //alto de mapa
-const int VIEW_WIDTH = 50;   //vista de ancho de mapa
-const int VIEW_HEIGHT = 20;  //vista de alto de mapa
+const int VIEW_WIDTH = 60;   //vista de ancho de mapa
+const int VIEW_HEIGHT = 30;  //vista de alto de mapa
 
 char map[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "################################################################################",
@@ -259,6 +260,8 @@ void checkMovement(){
 void showHUD(){
 
     rlutil::locate(1, 1);
+    rlutil::setColor(rlutil::LIGHTCYAN);
+    cout << "Player: " << MainMenu::playerName << "  ";
     rlutil::setColor(rlutil::WHITE);
     cout << "XP Level: " << player.level << "   Damage: " << player.dmg << "   HP: " << player.hp << "    ";
 

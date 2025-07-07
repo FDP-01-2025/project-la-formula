@@ -66,7 +66,7 @@ bool startCombat()
 {
 
     Enemy enemy2 = {
-        "CYBER UNIT-X", // Name
+        "ZIRKON ALPHA", // Name
         75,             // Hp
         75,             // hpMax
         15,              // dano
@@ -118,12 +118,12 @@ bool startCombat()
 
         while ((pos = ascii.find('\n')) != string::npos)
         {                                 // ascii.find('\n') busca la posición del primer salto de línea.
-            rlutil::locate(50, y++);      // rlutil::locate(40, y++) posiciona el cursor en la columna 40 y fila y, e imprime esa línea.
+            rlutil::locate(65, y++);      // Posicionar ASCII art más a la derecha para ventana de 120 caracteres
             cout << ascii.substr(0, pos); // ascii.substr(0, pos) obtiene el contenido antes del salto de línea (una línea de dibujo).
             ascii.erase(0, pos + 1);      // borra esa parte impresa más el \n con ascii.erase(0, pos + 1); para seguir con la siguiente línea.
         }
 
-        rlutil::locate(50, y);
+        rlutil::locate(65, y);
         cout << ascii;
 
         string options[] = {"Atack", "Run"};
@@ -284,11 +284,11 @@ void bossFight(Boss boss)
 
         while ((pos = ascii.find('\n')) != string::npos)
         {
-            rlutil::locate(50, y++);
+            rlutil::locate(65, y++);
             cout << ascii.substr(0, pos);
             ascii.erase(0, pos + 1);
         }
-        rlutil::locate(50, y);
+        rlutil::locate(65, y);
         cout << ascii;
 
         string options[] = {"Atack", "Run"};
@@ -361,7 +361,7 @@ void bossFight(Boss boss)
         if (!showMessage && boss.hp <= boss.hpMax / 2)
         {
             rlutil::locate(62, 4); // Línea adecuada que no tape nada
-            cout << boss.name << ": \"I will kill you!!!\"";
+            cout << boss.name << ": \"DIEEE!!!\"";
             showMessage = true;
 
             Sleep(3000); // para dar tiempo a leerlo

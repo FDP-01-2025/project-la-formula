@@ -4,6 +4,7 @@
 #include "../../Level1/Archi_h/Structs.h"
 #include "combate3.h"
 #include "temporal3.h"
+#include "../../mainmenu.h"
 
 namespace Nivel3{
 
@@ -29,7 +30,7 @@ char map[MAP_HEIGHT3][MAP_WIDTH3 + 1] = {
     "###................##....###....###......###...###...................#~~~~~~~~#",
     "#..................##...###......###.....##.....##...................#~~~~~~~~#",
     "#####################..##.....E....##....##..H..##......##############~~~~~~~~#",
-    "###~~~~~~~~~~~~~~~~##..##..........##....##.....##.....#~~~~~~~~~~~~~~~~~~~~~~#",
+    "###~~~~~~~~~~~~~~~~##..##..........##....##.....##..N..#~~~~~~~~~~~~~~~~~~~~~~#",
     "#####~~~~~~~~~~~~~~##..##..........##....##.....##.....#~~~~~~~~~~~~~~~~~~~~~~#",
     ".##############################################################################",
     "################################################################################"
@@ -51,6 +52,85 @@ void movePlayer(int dx, int dy){
         char destiny = map[newY][newX];  //Se obtiene el carácter que hay en el mapa en la posición nueva.
 
         if (destiny == '#') return;
+
+        if (destiny == '~') return;  //No se puede mover al agua
+
+        if (destiny ==  'N'){
+            // Limpiar el buffer de teclas antes de entrar al menú
+            while (kbhit()) getch();
+            
+            rlutil::cls(); // Limpiar toda la pantalla
+            rlutil::setColor(rlutil::CYAN);
+            rlutil::locate(10, 5);
+            cout << "==================== NPC CONVERSATION ====================";
+            rlutil::setColor(rlutil::WHITE);
+            
+            rlutil::locate(10, 7);
+            cout << "Mysterious NPC: \"Have you ever heard about Adam Smasher?\"";
+            
+            string options[] = {"Yes, I know him.", "No, who is he?"};
+            int select = 0;
+            
+            while (true) {
+                // Mostrar menú
+                for (int i = 0; i < 2; i++) {
+                    rlutil::locate(10, 9 + i);
+                    if (i == select) {
+                        rlutil::setColor(rlutil::YELLOW);
+                        cout << "> " << options[i];
+                    } else {
+                        rlutil::setColor(rlutil::WHITE);
+                        cout << "  " << options[i];
+                    }
+                }
+                
+                int key = getkey();
+                while (kbhit()) getch(); // Limpiar teclas residuales
+                
+                if (key == rlutil::KEY_UP)
+                    select = (select - 1 + 2) % 2;
+                else if (key == rlutil::KEY_DOWN)
+                    select = (select + 1) % 2;
+                else if (key == rlutil::KEY_ENTER)
+                    break;
+            }
+            
+            rlutil::cls(); // Limpiar para mostrar respuesta
+            rlutil::setColor(rlutil::CYAN);
+            rlutil::locate(10, 5);
+            cout << "==================== NPC CONVERSATION ====================";
+            rlutil::setColor(rlutil::WHITE);
+            
+            if (select == 0) { // "Yes, I know him."
+                rlutil::locate(10, 7);
+                cout << "Mysterious NPC: \"Then... go somewhere else...\"";
+                rlutil::locate(10, 9);
+                cout << "\"You must defeat him to save our city from destruction!\"";
+            } else { // "No, who is he?"
+                rlutil::locate(10, 7);
+                cout << "Mysterious NPC: \"He is the D-E-V-I-L,\"";
+                rlutil::locate(10, 9);
+                cout << "\"He is the leader of Arasaka, definitly he will kill you.\"";
+                rlutil::locate(10, 11);
+                cout << "\"No one can beat him, and someone like you cant fight with him.\"";
+                rlutil::locate(10, 13);
+                cout << "\"You must go somewhere else...\"";
+            }
+            
+            rlutil::locate(10, 16);
+            rlutil::setColor(rlutil::YELLOW);
+            cout << "Press any key to continue...";
+            rlutil::setColor(rlutil::WHITE);
+            
+            // Limpiar teclas residuales antes de esperar
+            while (kbhit()) getch();
+            getch(); // Esperar a que el jugador presione una tecla
+            
+            // Limpiar completamente la pantalla antes de volver al juego
+            rlutil::cls();
+            
+            return; // No mover al jugador a la posición del NPC
+        }
 
         if (destiny == 'H') {
             player3.hp += player3.hpMax / 2;  //Curar al jugador
@@ -121,6 +201,7 @@ void drawView_L3(){
         case '.': rlutil::setColor(rlutil::BROWN); break;
         case 'E': rlutil::setColor(rlutil::LIGHTBLUE); break;
         case 'H': rlutil::setColor(rlutil::YELLOW); break;
+        case 'N': rlutil::setColor(rlutil::BLUE); break;
         case 'P':
         if (unlockGate3)
         rlutil::setColor(rlutil::MAGENTA);
@@ -175,6 +256,8 @@ void checkMovement_L3(){
 void showHUD_L3(){
 
     rlutil::locate(1, 1);
+    rlutil::setColor(rlutil::LIGHTCYAN);
+    cout << "Player: " << MainMenu::playerName << "  ";
     rlutil::setColor(rlutil::WHITE);
     cout << "XP Level: " << player3.level << "   Damage: " << player3.dmg << "   HP: " << player3.hp << "    ";
 

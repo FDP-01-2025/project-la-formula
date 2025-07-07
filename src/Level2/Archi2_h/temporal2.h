@@ -5,7 +5,7 @@
 namespace Nivel2{
 
 Boss secondBoss = {    
-    "Glande Asesino",
+    "SERAPHIM.EXE",
     150,
     150,
     25,
