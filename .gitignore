@@ -1,11 +1,12 @@
 # Archivos ejecutables
 *.exe
 
-# Archivos temporales
-*.tmp
-*.txt
+# Archivos temporales del juego
 arte.txt
 arte2.txt
+
+# Archivos de guardado (opcional - descomenta si no quieres guardar saves)
+# savegame.txt
 
 # Archivos de sistema
 .DS_Store
@@ -15,3 +16,6 @@ Thumbs.db
 build/
 debug/
 release/
+
+# Carpetas que pueden causar errores
+MenuStart_End/
