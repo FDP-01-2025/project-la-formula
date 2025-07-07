@@ -12,8 +12,8 @@ using namespace std;
 
 namespace FinalScreen {
 
-// Devuelve el color adecuado para cada caracter del arte ASCII del final
-int coloreado(char c)
+// Returns the appropriate color for each character in the ASCII art
+int getCharColor(char c)
 {
     switch (c)
     {
@@ -35,14 +35,14 @@ int coloreado(char c)
     }
 }
 
-// Crea el archivo de arte ASCII para la pantalla final
-void crearArchivoArte()
+// Creates the ASCII art file for the final screen
+void createArtFile()
 {
-    ofstream archivo("arte.txt");
-    if (!archivo)
+    ofstream artFile("arte.txt");
+    if (!artFile)
         return;
 
-    const char *lineas[] = {
+    string lines[] = {
         "####::::################################################################################################################",
         "#####::###################################::############################################################################",
         "#########################################::::##############################::######################.....*#%#############",
@@ -76,30 +76,30 @@ void crearArchivoArte()
         "==-#%@@@@@@%%%%###########################################%=---=#%%%@@@@@@%%################@@@%%@@%@@%@@###%%%%%%%%%%%%",
     };
 
-    for (const char *linea : lineas)
-        archivo << linea << "\n";
+    for (const string& line : lines)
+        artFile << line << "\n";
 
-    archivo.close();
+    artFile.close();
     rlutil::hidecursor();
 }
 
-// Muestra el archivo de arte con colores
-void mostrarArchivoArte(const char *nombreArchivo)
+// Displays the art file with colors
+void displayArtFile(const string& fileName)
 {
-    ifstream archivo(nombreArchivo);
-    if (!archivo)
+    ifstream artFile(fileName);
+    if (!artFile)
         return;
 
-    char linea[1024];
-    while (archivo.getline(linea, sizeof(linea)))
+    string line;
+    while (getline(artFile, line))
     {
-        int longitud = strlen(linea);
-        for (int i = 0; i < longitud; ++i)
+        int length = line.length();
+        for (int i = 0; i < length; ++i)
         {
-            rlutil::setColor(coloreado(linea[i]));
-            cout << linea[i];
+            rlutil::setColor(getCharColor(line[i]));
+            cout << line[i];
         }
-        for (int i = longitud; i < 124; ++i)
+        for (int i = length; i < 124; ++i)
         {
             cout << ' ';
         }
@@ -107,58 +107,58 @@ void mostrarArchivoArte(const char *nombreArchivo)
         cout << endl;
     }
 
-    archivo.close();
+    artFile.close();
     rlutil::hidecursor();
 }
 
-// Dibuja una caja decorativa en consola
-void dibujarCaja(int x, int y, int ancho, int alto)
+// Draws a decorative box in the console
+void drawBox(int x, int y, int width, int height)
 {
     rlutil::setColor(rlutil::WHITE);
-    // línea superior
+    // Top line
     rlutil::locate(x, y);
     cout << "+";
-    for (int i = 0; i < ancho - 2; ++i)
+    for (int i = 0; i < width - 2; ++i)
         cout << "-";
     cout << "+";
 
-    // líneas laterales
-    for (int i = 1; i < alto - 1; ++i)
+    // Side lines
+    for (int i = 1; i < height - 1; ++i)
     {
         rlutil::locate(x, y + i);
         cout << "|";
-        rlutil::locate(x + ancho - 1, y + i);
+        rlutil::locate(x + width - 1, y + i);
         cout << "|";
     }
 
-    // línea inferior
-    rlutil::locate(x, y + alto - 1);
+    // Bottom line
+    rlutil::locate(x, y + height - 1);
     cout << "+";
-    for (int i = 0; i < ancho - 2; ++i)
+    for (int i = 0; i < width - 2; ++i)
         cout << "-";
     cout << "+";
 
     rlutil::resetColor();
 }
 
-// Muestra texto animado en una posición específica
-void mostrarTextoAnimadoEnPosicion(const string &texto, int x, int y, int delayMs = 100)
+// Displays animated text at a specific position
+void displayAnimatedTextAtPosition(const string &text, int x, int y, int delayMs = 100)
 {
     rlutil::locate(x, y);
-    for (char c : texto)
+    for (char c : text)
     {
         cout << c << flush;
         rlutil::msleep(delayMs);
     }
 }
 
-// Muestra la cinemática final con estadísticas del jugador
-void mostrarCinematicaFinal()
+// Displays the final cinematic with player statistics
+void displayFinalCinematic()
 {
     rlutil::cls();
     rlutil::setColor(rlutil::LIGHTGREEN);
     
-    const char *final[] = {
+    string finalArt[] = {
         "===================================================================================================================",
         "||                                                                                                               ||",
         "||                                                                                                               ||",
@@ -176,9 +176,9 @@ void mostrarCinematicaFinal()
         "||                                                                                                               ||",
     };
 
-    for (const char *linea : final)
+    for (const string& line : finalArt)
     {
-        cout << linea << endl;
+        cout << line << endl;
         rlutil::msleep(200);
     }
     
@@ -220,91 +220,94 @@ void mostrarCinematicaFinal()
     cout << "===================================================================================================================";
     
     rlutil::resetColor();
-    rlutil::anykey();
+    // Esperar a que el usuario presione una tecla
+    cout << endl << "Presiona cualquier tecla para continuar..." << flush;
+    cin.get();
 }
 
-// Calcula offset horizontal para centrar el arte
-double obtenerOffsetHorizontalArte(int arteAncho)
+// Calculates horizontal offset to center the art
+double getHorizontalArtOffset(int artWidth)
 {
     int cols = rlutil::tcols();
-    return (cols - arteAncho) / 2.0 + 1;
+    return (cols - artWidth) / 2.0 + 1;
 }
 
-// Calcula offset vertical para centrar el arte
-double obtenerOffsetVerticalArte(int arteAlto)
+// Calculates vertical offset to center the art
+double getVerticalArtOffset(int artHeight)
 {
     int rows = rlutil::trows();
-    return (rows - arteAlto) / 2.0 + 1;
+    return (rows - artHeight) / 2.0 + 1;
 }
 
-// Muestra el archivo de arte centrado en la pantalla
-void mostrarArchivoArteCentrado(const char *nombreArchivo, int &offsetX, int &offsetY, int &arteAlto, int extraYOffset = 0)
+// Displays the art file centered on the screen
+void displayCenteredArtFile(const string& fileName, int &offsetX, int &offsetY, int &artHeight, int extraYOffset = 0)
 {
-    ifstream archivo(nombreArchivo);
-    if (!archivo)
+    ifstream artFile(fileName);
+    if (!artFile)
         return;
-    const int arteAncho = 124;
-    arteAlto = 0;
-    offsetX = (int)obtenerOffsetHorizontalArte(arteAncho);
-    offsetY = (int)obtenerOffsetVerticalArte(48) + extraYOffset;
-    string linea;
-    while (getline(archivo, linea))
+    const int artWidth = 124;
+    artHeight = 0;
+    offsetX = (int)getHorizontalArtOffset(artWidth);
+    offsetY = (int)getVerticalArtOffset(48) + extraYOffset;
+    string line;
+    while (getline(artFile, line))
     {
-        rlutil::locate(offsetX, offsetY + arteAlto);
-        for (char c : linea)
+        rlutil::locate(offsetX, offsetY + artHeight);
+        for (char c : line)
         {
-            rlutil::setColor(coloreado(c));
+            rlutil::setColor(getCharColor(c));
             cout << c;
         }
         rlutil::resetColor();
         cout << endl;
-        arteAlto++;
+        artHeight++;
     }
-    archivo.close();
+    artFile.close();
     rlutil::hidecursor();
 }
 
-// Calcula coordenadas para centrar la caja sobre el arte
-void obtenerCoordenadasCajaCentradaSobreArte(int anchoCaja, int altoCaja, int offsetX, int offsetY, int arteAncho, int arteAlto, int &cajaX, int &cajaY)
+// Calculates coordinates to center the box over the art
+void getBoxCoordinatesCenteredOverArt(int boxWidth, int boxHeight, int offsetX, int offsetY, int artWidth, int artHeight, int &boxX, int &boxY)
 {
-    cajaX = offsetX + (arteAncho - anchoCaja) / 2;
-    cajaY = offsetY + (arteAlto - altoCaja) / 2;
+    boxX = offsetX + (artWidth - boxWidth) / 2;
+    boxY = offsetY + (artHeight - boxHeight) / 2;
 }
 
-// Muestra una caja centrada con mensaje sobre el arte
-void mostrarCajaCentradaConMensajeSobreArte(const string &mensaje, int offsetX, int offsetY, int arteAncho, int arteAlto, int delayMs = 60)
+// Displays a centered box with a message over the art
+void displayCenteredBoxWithMessageOverArt(const string &message, int offsetX, int offsetY, int artWidth, int artHeight, int delayMs = 60)
 {
-    int anchoCaja = (int)mensaje.size() + 4;
-    int altoCaja = 3;
-    int cajaX, cajaY;
-    obtenerCoordenadasCajaCentradaSobreArte(anchoCaja, altoCaja, offsetX, offsetY, arteAncho, arteAlto, cajaX, cajaY);
-    dibujarCaja(cajaX, cajaY, anchoCaja, altoCaja);
-    mostrarTextoAnimadoEnPosicion(mensaje, cajaX + 2, cajaY + 1, delayMs);
+    int boxWidth = (int)message.size() + 4;
+    int boxHeight = 3;
+    int boxX, boxY;
+    getBoxCoordinatesCenteredOverArt(boxWidth, boxHeight, offsetX, offsetY, artWidth, artHeight, boxX, boxY);
+    drawBox(boxX, boxY, boxWidth, boxHeight);
+    displayAnimatedTextAtPosition(message, boxX + 2, boxY + 1, delayMs);
 }
 
-// Función principal que muestra toda la pantalla final
+// Main function that displays the entire final screen
 void showFinalScreen()
 {
     SetConsoleOutputCP(CP_UTF8);
     
-    // Detener la música del juego si está sonando
+    // Stop the game music if it's playing
     MainMenu::stopMusic();
     
-    crearArchivoArte();
-    int offsetX, offsetY, arteAlto;
+    createArtFile();
+    int offsetX, offsetY, artHeight;
     int extraYOffset = 10;
     
-    mostrarArchivoArteCentrado("arte.txt", offsetX, offsetY, arteAlto, extraYOffset);
+    string artFileName = "arte.txt";
+    displayCenteredArtFile(artFileName, offsetX, offsetY, artHeight, extraYOffset);
     
-    string mensaje = "Congratulations " + MainMenu::playerName + "! You have completed your adventure!";
-    mostrarCajaCentradaConMensajeSobreArte(mensaje, offsetX, offsetY, 124, arteAlto);
+    string message = "Congratulations " + MainMenu::playerName + "! You have completed your adventure!";
+    displayCenteredBoxWithMessageOverArt(message, offsetX, offsetY, 124, artHeight);
     
-    rlutil::msleep(4000); // espera 4 segundos
+    rlutil::msleep(4000); // wait 4 seconds
     
-    mostrarCinematicaFinal();
+    displayFinalCinematic();
     
-    // Limpiar archivo temporal
-    remove("arte.txt");
+    // Clean up temporary file
+    remove(artFileName.c_str());
 }
 
 } // namespace FinalScreen
