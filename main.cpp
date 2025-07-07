@@ -1,8 +1,8 @@
 #include <ctime> //time(0) para obtener tiempo actual como semilla para srand.
 //<ctime> incluye internamente <stdlib.h> que es la versión C de <cstdlib> (la que sirve para rand)
 
-#include "src/mainmenu.h"
-#include "src/finalscreen.h"
+#include "src/MenuStart_End/mainmenu.h"
+#include "src/MenuStart_End/finalscreen.h"
 #include "src/MenuPausa/pauseMenu.h"
 #include "src/MenuPausa/loadGame.h"  // Para la función loadGame()
 #include "src/Level1/Archi_h/mapa.h"

@@ -174,6 +174,31 @@ int visualWidth(const string& str)
     return width;
 }
 
+// Displays a file with colored ASCII art
+void displayFile(const string& fileName)
+{
+    ifstream file(fileName);
+    if (!file)
+        return;
+
+    string line;
+    int lineNumber = 0;
+    while (getline(file, line))
+    {
+        rlutil::locate(1, lineNumber);
+        for (char c : line)
+        {
+            rlutil::setColor(getAsciiColor(c));
+            cout << c;
+        }
+        cout << endl;
+        lineNumber++;
+    }
+
+    file.close();
+    rlutil::resetColor();
+}
+
 // Displays the animated game logo
 void showLogo()
 {
