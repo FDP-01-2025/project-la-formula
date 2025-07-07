@@ -173,7 +173,7 @@ void mostrarCinematicaFinal()
         "||===============================================================================================================||",
         "||                                                                                                               ||",
         "||                                    == G  A  M  E    S  U  M  M  A  R  Y ==                                    ||",
-        "||                                                                                                               ||"
+        "||                                                                                                               ||",
     };
 
     for (const char *linea : final)
@@ -184,39 +184,39 @@ void mostrarCinematicaFinal()
     
     // Mostrar estadísticas personalizadas
     rlutil::setColor(rlutil::LIGHTCYAN);
-    rlutil::locate(15, 16);
+    rlutil::locate(1, 16);
     cout << "||              > Hero Name          :     " << MainMenu::playerName;
-    for (int i = MainMenu::playerName.length(); i < 50; i++) cout << " ";
+    for (int i = MainMenu::playerName.length(); i < 70; i++) cout << " ";
     cout << "||";
     
     rlutil::setColor(rlutil::YELLOW);
-    rlutil::locate(15, 17);
-    cout << "||              > Enemies Defeated   :     Many                                                                ||";
-    rlutil::locate(15, 18);
-    cout << "||              > Bosses Defeated    :     3                                                                   ||";
-    rlutil::locate(15, 19);
-    cout << "||              > Levels Completed   :     3                                                                   ||";
-    rlutil::locate(15, 20);
-    cout << "||              > Final Level        :     Master Adventurer                                                   ||";
+    rlutil::locate(1, 17);
+    cout << "||              > Enemies Defeated   :     Many                                                                  ||";
+    rlutil::locate(1, 18);
+    cout << "||              > Bosses Defeated    :     3                                                                     ||";
+    rlutil::locate(1, 19);
+    cout << "||              > Levels Completed   :     3                                                                     ||";
+    rlutil::locate(1, 20);
+    cout << "||              > Final Level        :     Master Adventurer                                                     ||";
     
     rlutil::setColor(rlutil::LIGHTGREEN);
-    rlutil::locate(15, 21);
+    rlutil::locate(1, 21);
     cout << "||                                                                                                               ||";
-    rlutil::locate(15, 22);
+    rlutil::locate(1, 22);
     cout << "||                                                                                                               ||";
-    rlutil::locate(15, 23);
+    rlutil::locate(1, 23);
     cout << "||                                                                                                               ||";
-    rlutil::locate(15, 24);
-    cout << "||                              Thank you for playing, " << MainMenu::playerName << "! See you soon.";
-    for (int i = MainMenu::playerName.length(); i < 25; i++) cout << " ";
+    rlutil::locate(1, 24);
+    cout << "||                              Thank you for playing, " << MainMenu::playerName << "! See you soon.";           
+    for (int i = MainMenu::playerName.length(); i < 43; i++) cout << " ";
     cout << "||";
-    rlutil::locate(15, 25);
+    rlutil::locate(1, 25);
     cout << "||                                                                                                               ||";
-    rlutil::locate(15, 26);
-    cout << "||                                    Press any key to exit the game...                                        ||";
-    rlutil::locate(15, 27);
+    rlutil::locate(1, 26);
+    cout << "||                                    Press any key to exit the game...                                          ||";
+    rlutil::locate(1, 27);
     cout << "||                                                                                                               ||";
-    rlutil::locate(15, 28);
+    rlutil::locate(1, 28);
     cout << "===================================================================================================================";
     
     rlutil::resetColor();
