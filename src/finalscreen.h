@@ -191,7 +191,7 @@ void displayFinalCinematic()
     
     rlutil::setColor(rlutil::YELLOW);
     rlutil::locate(1, 17);
-    cout << "||              > Enemies Defeated   :     Many                                                                  ||";
+    cout << "||              > Enemies Defeated   :     8                                                                  ||";
     rlutil::locate(1, 18);
     cout << "||              > Bosses Defeated    :     3                                                                     ||";
     rlutil::locate(1, 19);
