@@ -108,8 +108,8 @@ string getPlayerName()
     return name;
 }
 
-// Devuelve el color adecuado para cada caracter del arte ASCII
-int colorear(char c)
+// Returns the appropriate color for each character in the ASCII art
+int getAsciiColor(char c)
 {
     switch (c)
     {
@@ -142,14 +142,14 @@ int colorear(char c)
     }
 }
 
-// Calcula el ancho visual de una cadena UTF-8 (para centrar el logo)
-int visualWidth(const char *str)
+// Calculates the visual width of a UTF-8 string (for logo centering)
+int visualWidth(const string& str)
 {
     int width = 0;
-    for (int i = 0; str[i] != '\0';)
+    for (size_t i = 0; i < str.length();)
     {
         width++;
-        // Avanza al siguiente caracter UTF-8
+        // Move to the next UTF-8 character
         if ((str[i] & 0x80) == 0)
         {
             i += 1;
@@ -174,90 +174,93 @@ int visualWidth(const char *str)
     return width;
 }
 
-// Muestra el logo animado del juego
-void mostrarLogo()
+// Displays the animated game logo
+void showLogo()
 {
-    // Logo en arte ASCII
-    const char *logo[] = {
+    // ASCII art logo using string instead of const char*
+    string logo[] = {
         " █████╗     ███████╗    ████████╗    ███████╗    ██████╗     ███╗   ███╗     █████╗     ████████╗    ██╗  ██╗",
         "██╔══██╗    ██╔════╝    ╚══██╔══╝    ██╔════╝    ██╔══██╗    ████╗ ████║    ██╔══██╗    ╚══██╔══╝    ██║  ██║",
         "███████║    █████╗         ██║       █████╗      ██████╔╝    ██╔████╔██║    ███████║       ██║       ███████║",
         "██╔══██║    ██╔══╝         ██║       ██╔══╝      ██╔══██╗    ██║╚██╔╝██║    ██╔══██║       ██║       ██╔══██║",
         "██║  ██║    ██║            ██║       ███████╗    ██║  ██║    ██║ ╚═╝ ██║    ██║  ██║       ██║       ██║  ██║",
         "╚═╝  ╚═╝    ╚═╝            ╚═╝       ╚══════╝    ╚═╝  ╚═╝    ╚═╝     ╚═╝    ╚═╝  ╚═╝       ╚═╝       ╚═╝  ╚═╝"};
-    int num_lines = sizeof(logo) / sizeof(logo[0]);
-    int max_len = visualWidth(logo[0]);
-    int startY = 15;                              // Fila inicial para el logo
-    int startX = (rlutil::tcols() - max_len) / 2; // Centrado horizontal
+    int numLines = sizeof(logo) / sizeof(logo[0]);
+    int maxLen = visualWidth(logo[0]);
+    int startY = 15;                              // Initial row for the logo
+    int startX = (rlutil::tcols() - maxLen) / 2;  // Horizontal centering
 
-    // Animación de aparición del logo
-    for (int i = 0; i < num_lines; ++i)
+    // Logo reveal animation
+    for (int i = 0; i < numLines; ++i)
     {
         rlutil::locate(startX, startY + i);
-        const char *line = logo[i];
-        for (int j = 0; line[j] != '\0';)
+        string line = logo[i];
+        
+        // Process each character of the line using string indices
+        for (size_t j = 0; j < line.length();)
         {
-            int char_bytes = 1;
+            int charBytes = 1;
             if ((line[j] & 0x80) == 0)
             {
-                char_bytes = 1;
+                charBytes = 1;
             }
             else if ((line[j] & 0xE0) == 0xC0)
             {
-                char_bytes = 2;
+                charBytes = 2;
             }
             else if ((line[j] & 0xF0) == 0xE0)
             {
-                char_bytes = 3;
+                charBytes = 3;
             }
             else if ((line[j] & 0xF8) == 0xF0)
             {
-                char_bytes = 4;
+                charBytes = 4;
             }
-            // Imprime el caracter (todos sus bytes)
-            for (int k = 0; k < char_bytes; ++k)
+            
+            // Print the character (all its bytes)
+            for (int k = 0; k < charBytes; ++k)
             {
                 cout << line[j + k];
             }
             cout.flush();
-            j += char_bytes;
-            rlutil::msleep(5); // Velocidad de animación
+            j += charBytes;
+            rlutil::msleep(5); // Animation speed
         }
     }
 }
 
-// Muestra archivo con arte coloreado línea por línea
-void mostrarArchivo(const char *nombreArchivo)
+// Displays a file with colored art line by line
+void displayFile(const string& fileName)
 {
-    ifstream archivo(nombreArchivo);
-    if (!archivo)
+    ifstream file(fileName);
+    if (!file)
         return;
-    string linea;
-    while (getline(archivo, linea))
+    string line;
+    while (getline(file, line))
     {
-        int longitud = linea.length();
-        for (int i = 0; i < longitud; ++i)
+        int length = line.length();
+        for (int i = 0; i < length; ++i)
         {
-            rlutil::setColor(colorear(linea[i]));
-            cout << linea[i];
+            rlutil::setColor(getAsciiColor(line[i]));
+            cout << line[i];
         }
-        for (int i = longitud; i < 100; ++i)
+        for (int i = length; i < 100; ++i)
         {
             cout << ' ';
         }
         rlutil::resetColor();
         cout << endl;
     }
-    archivo.close();
+    file.close();
 }
 
-// Crea el archivo arte2.txt con el menú y arte decorativo
-void crearArchivoArte2()
+// Creates the arte2.txt file with the menu and decorative art
+void createMenuArtFile()
 {
-    ofstream archivo("arte2.txt");
-    if (!archivo)
+    ofstream menuFile("arte2.txt");
+    if (!menuFile)
         return;
-    const char *lineas[] = {
+    string lines[] = {
         " .   `-._.-*   /    `-*'  `*-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
         "-._.*        _.-'        .-.    `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |          M E N U           | |",
         "          .-'         _.'   `-._   `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |----------------------------| |",
@@ -289,14 +292,15 @@ void crearArchivoArte2()
         " ;  ;         ;   ;        :%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
     };
     
-    const int num_lineas = sizeof(lineas) / sizeof(lineas[0]);
-    for (int i = 0; i < num_lineas; ++i)
+    const int numLines = sizeof(lines) / sizeof(lines[0]);
+    for (int i = 0; i < numLines; ++i)
     {
-        archivo << lineas[i] << endl;
+        menuFile << lines[i] << endl;
     }
-    archivo.close();
+    menuFile.close();
 }
 
+<<<<<<< HEAD
 // Función para manejar la carga de juego guardado
 // Retorna true si se cargó exitosamente, false si hay que empezar juego nuevo
 bool handleContinueGame() {
@@ -324,47 +328,52 @@ bool handleContinueGame() {
 // Muestra el menú interactivo y permite seleccionar una opción con W/S
 // Retorna: 0 = New Game, 1 = Continue, 2 = Exit
 int menuInteractivo(const char *nombreArchivo)
+=======
+// Displays the interactive menu and allows option selection with W/S
+// Returns: 0 = New Game, 1 = Continue, 2 = Exit
+int interactiveMenu(const string& fileName)
+>>>>>>> d00d73cda4f70c92c28957d3cd79380b9b52de91
 {
-    int i = 0; // Opción seleccionada
+    int selectedOption = 0; // Selected option
     int key;
     rlutil::hidecursor();
-    mostrarArchivo(nombreArchivo);
+    displayFile(fileName);
     
-    // Posición inicial del selector
-    rlutil::locate(75, 5 + i);
-    cout << '>'; // Selector visible
+    // Initial position of the selector
+    rlutil::locate(75, 5 + selectedOption);
+    cout << '>'; // Visible selector
     do
     {
         key = rlutil::getkey();
-        // Borra el selector anterior
-        rlutil::locate(75, 5 + i);
+        // Erase previous selector
+        rlutil::locate(75, 5 + selectedOption);
         cout << " ";
         switch (key)
         {
         case 'w':
         case 'W':
-            i--;
-            if (i < 0)
-                i = 0;
+            selectedOption--;
+            if (selectedOption < 0)
+                selectedOption = 0;
             break;
         case 's':
         case 'S':
-            i++;
-            if (i > 2)
-                i = 2;
+            selectedOption++;
+            if (selectedOption > 2)
+                selectedOption = 2;
             break;
         }
-        // Dibuja el nuevo selector
-        rlutil::locate(75, 5 + i);
+        // Draw new selector
+        rlutil::locate(75, 5 + selectedOption);
         cout << '>';
     } while (key != rlutil::KEY_ENTER);
     
-    // Mostrar mensaje según la opción elegida
-    rlutil::locate(75, 5 + i);
-    cout << " "; // Borra el selector
+    // Show message based on the chosen option
+    rlutil::locate(75, 5 + selectedOption);
+    cout << " "; // Erase selector
     rlutil::locate(77, 5);
     
-    switch (i)
+    switch (selectedOption)
     {
     case 2:
         cout << "The adventure can wait...";
@@ -383,27 +392,28 @@ int menuInteractivo(const char *nombreArchivo)
     }
     rlutil::resetColor();
     rlutil::cls();
-    return i;
+    return selectedOption;
 }
 
-// Función principal del menú que maneja todo el flujo
-// Retorna: 0 = New Game, 1 = Continue, 2 = Exit
+// Main menu function that handles the entire flow
+// Returns: 0 = New Game, 1 = Continue, 2 = Exit
 int showMainMenu()
 {
-    SetConsoleOutputCP(CP_UTF8); // Soporte UTF-8 en consola
+    SetConsoleOutputCP(CP_UTF8); // UTF-8 console support
     
-    // 🔊 Inicia la música de fondo en loop
+    // 🔊 Start background music in loop
     if (!PlaySoundA("MenuSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP))
     {
-        // No mostrar error si no encuentra el archivo de música
+        // Don't show error if the music file is not found
     }
     
-    mostrarLogo();                // Muestra el logo animado
-    rlutil::msleep(3000);         // Espera 3 segundos
-    rlutil::cls();                // Limpia pantalla
-    crearArchivoArte2();          // Crea el menú arte2.txt
-    int selection = menuInteractivo("arte2.txt"); // Muestra menú interactivo
-    remove("arte2.txt");          // Borra archivo temporal
+    showLogo();                   // Display the animated logo
+    rlutil::msleep(3000);         // Wait 3 seconds
+    rlutil::cls();                // Clear screen
+    createMenuArtFile();          // Create the menu arte2.txt
+    string menuFile = "arte2.txt";
+    int selection = interactiveMenu(menuFile); // Display interactive menu
+    remove(menuFile.c_str());     // Delete temporary file (c_str() for compatibility with remove)
     
     return selection;
 }
