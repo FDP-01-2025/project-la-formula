@@ -6,6 +6,7 @@
 			"type": "shell",
 			"command": "g++",
 			"args": [
+				"-g",
 				"main.cpp",
 				"-o",
 				"game.exe",

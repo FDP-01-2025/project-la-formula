@@ -1,8 +1,8 @@
 #include <ctime> //time(0) para obtener tiempo actual como semilla para srand.
 //<ctime> incluye internamente <stdlib.h> que es la versión C de <cstdlib> (la que sirve para rand)
-
-#include "src/mainmenu.h"
-#include "src/finalscreen.h"
+#include <iostream>
+#include "src/MenuStart_End/mainmenu.h"
+#include "src/MenuStart_End/finalscreen.h"
 #include "src/MenuPausa/pauseMenu.h"
 #include "src/MenuPausa/loadGame.h"  // Para la función loadGame()
 #include "src/Level1/Archi_h/mapa.h"
@@ -43,7 +43,7 @@ int main()
             }
             break;
         case 2: // Exit
-            MainMenu::stopMusic();
+            PlaySoundA(NULL, NULL, 0);
             return 0;
         default:
             return 0;
@@ -107,6 +107,6 @@ int main()
     }
     
     // Detener la música al salir
-    MainMenu::stopMusic();
+    PlaySoundA(NULL, NULL, 0);
     return 0;
 }

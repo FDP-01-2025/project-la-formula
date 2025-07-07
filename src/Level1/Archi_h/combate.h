@@ -2,7 +2,7 @@
 #define COMBATE_H
 
 #include <limits> //Usas para limpiar el buffer de entrada cuando hay error en cin: cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
+#include <iostream>
 #include "variables.h"
 #include "rlutil.h"
 #include "Structs.h"
