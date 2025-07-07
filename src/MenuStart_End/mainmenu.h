@@ -177,7 +177,7 @@ int visualWidth(const string& str)
 // Displays the animated game logo
 void showLogo()
 {
-    // ASCII art logo using string instead of const char*
+    // ASCII art logo using string 
     string logo[] = {
         " █████╗     ███████╗    ████████╗    ███████╗    ██████╗     ███╗   ███╗     █████╗     ████████╗    ██╗  ██╗",
         "██╔══██╗    ██╔════╝    ╚══██╔══╝    ██╔════╝    ██╔══██╗    ████╗ ████║    ██╔══██╗    ╚══██╔══╝    ██║  ██║",
@@ -229,30 +229,7 @@ void showLogo()
     }
 }
 
-// Displays a file with colored art line by line
-void displayFile(const string& fileName)
-{
-    ifstream file(fileName);
-    if (!file)
-        return;
-    string line;
-    while (getline(file, line))
-    {
-        int length = line.length();
-        for (int i = 0; i < length; ++i)
-        {
-            rlutil::setColor(getAsciiColor(line[i]));
-            cout << line[i];
-        }
-        for (int i = length; i < 100; ++i)
-        {
-            cout << ' ';
-        }
-        rlutil::resetColor();
-        cout << endl;
-    }
-    file.close();
-}
+
 
 // Creates the arte2.txt file with the menu and decorative art
 void createMenuArtFile()

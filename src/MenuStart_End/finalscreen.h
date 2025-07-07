@@ -239,20 +239,23 @@ double getVerticalArtOffset(int artHeight)
     return (rows - artHeight) / 2.0 + 1;
 }
 
-// Displays the art file centered on the screen
-void displayCenteredArtFile(const string& fileName, int &offsetX, int &offsetY, int &artHeight, int extraYOffset = 0)
+// Displays the art file centered on the screen and returns its position details
+ArtPosition displayCenteredArtFile(const string& fileName, int extraYOffset = 0)
 {
+    ArtPosition artPos = {0, 0, 0}; // Initialize with defaults
+    
     ifstream artFile(fileName);
     if (!artFile)
-        return;
+        return artPos;
+        
     const int artWidth = 124;
-    artHeight = 0;
-    offsetX = (int)getHorizontalArtOffset(artWidth);
-    offsetY = (int)getVerticalArtOffset(48) + extraYOffset;
+    artPos.offsetX = (int)getHorizontalArtOffset(artWidth);
+    artPos.offsetY = (int)getVerticalArtOffset(48) + extraYOffset;
+    
     string line;
     while (getline(artFile, line))
     {
-        rlutil::locate(offsetX, offsetY + artHeight);
+        rlutil::locate(artPos.offsetX, artPos.offsetY + artPos.height);
         for (char c : line)
         {
             rlutil::setColor(getCharColor(c));
@@ -260,17 +263,34 @@ void displayCenteredArtFile(const string& fileName, int &offsetX, int &offsetY, 
         }
         rlutil::resetColor();
         cout << endl;
-        artHeight++;
+        artPos.height++;
     }
     artFile.close();
     rlutil::hidecursor();
+    
+    return artPos;
 }
 
-// Calculates coordinates to center the box over the art
-void getBoxCoordinatesCenteredOverArt(int boxWidth, int boxHeight, int offsetX, int offsetY, int artWidth, int artHeight, int &boxX, int &boxY)
+// Structure to hold box coordinates
+struct BoxCoordinates {
+    int x;
+    int y;
+};
+
+// Structure to hold art positioning information
+struct ArtPosition {
+    int offsetX;
+    int offsetY;
+    int height;
+};
+
+// Calculates coordinates to center the box over the art (without using reference parameters)
+BoxCoordinates getBoxCoordinatesCenteredOverArt(int boxWidth, int boxHeight, int offsetX, int offsetY, int artWidth, int artHeight)
 {
-    boxX = offsetX + (artWidth - boxWidth) / 2;
-    boxY = offsetY + (artHeight - boxHeight) / 2;
+    BoxCoordinates coords;
+    coords.x = offsetX + (artWidth - boxWidth) / 2;
+    coords.y = offsetY + (artHeight - boxHeight) / 2;
+    return coords;
 }
 
 // Displays a centered box with a message over the art
@@ -278,10 +298,13 @@ void displayCenteredBoxWithMessageOverArt(const string &message, int offsetX, in
 {
     int boxWidth = (int)message.size() + 4;
     int boxHeight = 3;
-    int boxX, boxY;
-    getBoxCoordinatesCenteredOverArt(boxWidth, boxHeight, offsetX, offsetY, artWidth, artHeight, boxX, boxY);
-    drawBox(boxX, boxY, boxWidth, boxHeight);
-    displayAnimatedTextAtPosition(message, boxX + 2, boxY + 1, delayMs);
+    
+    // Get box coordinates using the new function (no pointers/references)
+    BoxCoordinates boxCoords = getBoxCoordinatesCenteredOverArt(boxWidth, boxHeight, offsetX, offsetY, artWidth, artHeight);
+    
+    // Draw the box and display text
+    drawBox(boxCoords.x, boxCoords.y, boxWidth, boxHeight);
+    displayAnimatedTextAtPosition(message, boxCoords.x + 2, boxCoords.y + 1, delayMs);
 }
 
 // Main function that displays the entire final screen
@@ -293,14 +316,14 @@ void showFinalScreen()
     MainMenu::stopMusic();
     
     createArtFile();
-    int offsetX, offsetY, artHeight;
     int extraYOffset = 10;
     
     string artFileName = "arte.txt";
-    displayCenteredArtFile(artFileName, offsetX, offsetY, artHeight, extraYOffset);
+    // Get art position information without using pointers/references
+    ArtPosition artPos = displayCenteredArtFile(artFileName, extraYOffset);
     
     string message = "Congratulations " + MainMenu::playerName + "! You have completed your adventure!";
-    displayCenteredBoxWithMessageOverArt(message, offsetX, offsetY, 124, artHeight);
+    displayCenteredBoxWithMessageOverArt(message, artPos.offsetX, artPos.offsetY, 124, artPos.height);
     
     rlutil::msleep(4000); // wait 4 seconds
     
