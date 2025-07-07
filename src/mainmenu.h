@@ -10,6 +10,10 @@
 
 using namespace std;
 
+// Declaraciones de funciones y variables globales
+extern bool loadGame();  // Función global definida en loadGame.h
+extern int actualLevel;  // Variable global definida en main.cpp
+
 namespace MainMenu {
 
 // Variable global para almacenar el nombre del jugador (extern para acceso global)
@@ -291,6 +295,30 @@ void crearArchivoArte2()
         archivo << lineas[i] << endl;
     }
     archivo.close();
+}
+
+// Función para manejar la carga de juego guardado
+// Retorna true si se cargó exitosamente, false si hay que empezar juego nuevo
+bool handleContinueGame() {
+    rlutil::cls();
+    rlutil::locate(30, 12);
+    cout << "Loading saved game...";
+    rlutil::msleep(1000);
+    
+    if (::loadGame()) {
+        // El juego se cargó exitosamente
+        rlutil::locate(30, 14);
+        cout << "Game loaded! Returning to level " << ::actualLevel;
+        rlutil::msleep(2000);
+        return true;
+    } else {
+        // No hay archivo de guardado, empezar juego nuevo
+        rlutil::locate(30, 14);
+        cout << "No saved game found. Starting new game...";
+        rlutil::msleep(2000);
+        playerName = getPlayerName();
+        return false;  // Indica que hay que empezar desde nivel 1
+    }
 }
 
 // Muestra el menú interactivo y permite seleccionar una opción con W/S

@@ -1,15 +1,17 @@
 #ifndef MAPA_H
 #define MAPA_H
  
+#include <windows.h>  // Para GetAsyncKeyState() y GetTickCount()
 #include "Structs.h"
 #include "combate.h"
 #include "../../mainmenu.h"
+#include "../../MenuPausa/pauseMenu.h"
 
 namespace Nivel1{
 const int MAP_WIDTH = 80;    //ancho de mapa
 const int MAP_HEIGHT = 20;   //alto de mapa
-const int VIEW_WIDTH = 60;   //vista de ancho de mapa
-const int VIEW_HEIGHT = 30;  //vista de alto de mapa
+const int VIEW_WIDTH = 50;   //vista de ancho de mapa
+const int VIEW_HEIGHT = 20;  //vista de alto de mapa
 
 char map[MAP_HEIGHT][MAP_WIDTH + 1] = {
     "################################################################################",
@@ -231,29 +233,35 @@ unsigned long lastMoveTime = 0;          //guarda el momento en que se movió po
 const unsigned long repeatDelay = 80;    ////cantidad mínima de tiempo (80 ms) entre movimientos si se deja la tecla presionada.
 
 
+// Sistema de movimiento avanzado con GetAsyncKeyState - permite mantener teclas presionadas
 void checkMovement(){
+    static int lastDir = 0;         // Se usa para recordar la última dirección presionada entre llamadas.
+    unsigned long now = GetTickCount();  // Guarda el tiempo actual en milisegundos. (es de windows)
 
-    static int lastDir = 0;         //Se usa para recordar la última dirección presionada entre llamadas.
-    unsigned long now = GetTickCount();  //Guarda el tiempo actual en milisegundos. (es de windows)
-
-    auto move = [&](int dir, int dx, int dy) {       //función lambda que toma una tecla (dir) Y un desplazamiento dx, dy (para mover al jugador)
-        if (GetAsyncKeyState(dir) & 0x8000) {     //Verifica si la tecla **está siendo presionada** en este instante y 0x8000 es un flag que indica si la tecla está físicamente abajo.
+    auto move = [&](int dir, int dx, int dy) {       // función lambda que toma una tecla (dir) Y un desplazamiento dx, dy (para mover al jugador)
+        if (GetAsyncKeyState(dir) & 0x8000) {     // Verifica si la tecla **está siendo presionada** en este instante y 0x8000 es un flag que indica si la tecla está físicamente abajo.
         
-            if (!keyHeld || lastDir != dir || now - lastMoveTime > repeatDelay) {   //controla si ya puedes mover al jugador de nuevo
-                movePlayer(dx, dy);   //mueve al jugador en esa dirección
-                lastMoveTime = now;     //actualiza el tiempo del último movimiento
-                keyHeld = true;         //marca que la tecla está siendo mantenida
-                lastDir = dir;          //guarda la dirección actual
+            if (!keyHeld || lastDir != dir || now - lastMoveTime > repeatDelay) {   // controla si ya puedes mover al jugador de nuevo
+                movePlayer(dx, dy);   // mueve al jugador en esa dirección
+                lastMoveTime = now;     // actualiza el tiempo del último movimiento
+                keyHeld = true;         // marca que la tecla está siendo mantenida
+                lastDir = dir;          // guarda la dirección actual
             }
-        } else if (lastDir == dir) {    //Si esa era la tecla que se estaba presionando antes, pero ahora ya no, se reinicia keyHeld.
+        } else if (lastDir == dir) {    // Si esa era la tecla que se estaba presionando antes, pero ahora ya no, se reinicia keyHeld.
             keyHeld = false;
         }
     };
 
-    move('W', 0, -1);
-    move('S', 0, 1);
-    move('A', -1, 0);
-    move('D', 1, 0);
+    move('W', 0, -1);  // Arriba
+    move('S', 0, 1);   // Abajo
+    move('A', -1, 0);  // Izquierda
+    move('D', 1, 0);   // Derecha
+    
+    // Verificar tecla ESC para menú de pausa
+    if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+        PauseMenu::showPauseMenu();
+        // El menú de pausa maneja la salida directamente si es necesario
+    }
 }
 
 
