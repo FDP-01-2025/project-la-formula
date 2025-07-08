@@ -38,6 +38,10 @@ int getCharColor(char c)
 // Creates the ASCII art file for the final screen
 void createArtFile()
 {
+
+    PlaySoundA("MenuFinal.wav", NULL, SND_FILENAME | SND_ASYNC| SND_LOOP);
+
+
     ofstream artFile("arte.txt");
     if (!artFile)
         return;
@@ -212,6 +216,8 @@ void showFinalScreen()
 
     // Clean up temporary file
     remove(artFileName.c_str());
+
+    PlaySoundA(NULL, NULL, 0);
 }
 
 } // namespace FinalScreen
