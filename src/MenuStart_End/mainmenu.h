@@ -222,8 +222,9 @@ inline void showLogo()
 inline void createMenuArtFile()
 {
     ofstream menuFile("arte2.txt");
-    if (!menuFile) return;
-
+    if (!menuFile)
+        return;
+    
     string lines[] = {
         " .   `-._.-*   /    `-*'  `*-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
         "-._.*        _.-'        .-.    `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |          M E N U           | |",
@@ -255,10 +256,9 @@ inline void createMenuArtFile()
         "        /;     :        `---..._______...--*'%%%%%%%%%%%%%%%%%%%%%%%%%| |                            | |",
         " ;  ;         ;   ;        :%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++"
     };
-
-    int numLines = sizeof(lines) / sizeof(lines[0]);
-    for (int i = 0; i < numLines; ++i)
-        menuFile << lines[i] << endl;
+    
+    for (const string& line : lines)
+        menuFile << line << "\n";
 
     menuFile.close();
 }
@@ -292,16 +292,16 @@ inline int interactiveMenu(const char *fileName)
     int key;
 
     rlutil::hidecursor();
-    displayFile(string(fileName)); // La función displayFile debe estar definida en algún lado para mostrar el arte
-
-    rlutil::locate(75, 5 + selectedOption);
-    cout << '>';
-
-    do {
+    displayFile(string(fileName)); // Convert const char* to string
+    
+    // Initial position of the selector
+    rlutil::locate(75, 4 + selectedOption);
+    cout << '>'; // Visible selector
+    do
+    {
         key = rlutil::getkey();
-
-        // Borra selector anterior
-        rlutil::locate(75, 5 + selectedOption);
+        // Erase previous selector
+        rlutil::locate(75, 4 + selectedOption);
         cout << " ";
 
         switch (key) {
@@ -312,16 +312,17 @@ inline int interactiveMenu(const char *fileName)
                 if (selectedOption < 2) selectedOption++;
                 break;
         }
-
-        rlutil::locate(75, 5 + selectedOption);
+        // Draw new selector
+        rlutil::locate(75, 4 + selectedOption);
         cout << '>';
 
     } while (key != rlutil::KEY_ENTER);
-
-    rlutil::locate(75, 5 + selectedOption);
-    cout << " "; // Borra selector
-
-    rlutil::locate(77, 5);
+    
+    // Show message based on the chosen option
+    rlutil::locate(75, 4 + selectedOption);
+    cout << " "; // Erase selector
+    rlutil::locate(77, 4 + selectedOption);
+    
     switch (selectedOption)
     {
     case 0: cout << "The adventure begins!..."; break;
