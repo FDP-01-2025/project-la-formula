@@ -34,4 +34,4 @@ Este proyecto consiste en un juego de aventuras de género RPG, el cual el jugad
 
 
 ## Link de flujogramas
-https://app.diagrams.net/# 
+
