@@ -39,7 +39,7 @@ int getCharColor(char c)
 void createArtFile()
 {
 
-    PlaySoundA("MenuFinal.wav", NULL, SND_FILENAME | SND_ASYNC| SND_LOOP);
+    PlaySoundA("FinalSong.wav", NULL, SND_FILENAME | SND_ASYNC| SND_LOOP);
 
 
     ofstream artFile("arte.txt");
