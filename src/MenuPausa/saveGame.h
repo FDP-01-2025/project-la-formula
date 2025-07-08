@@ -30,7 +30,7 @@ namespace Nivel2 {
     extern char map[20][81];
 }
 
-namespace Nivel3 {
+namespace Nivel3 { 
     extern int playerX3, playerY3;
     extern Character player3;
     extern bool unlockGate3, bossDefeated3;

@@ -14,11 +14,11 @@ struct Character {
 };
 
 struct Enemy {
-    std::string name;
+    string name;
     int hp;
     int hpMax;
     int dmg;
-    std::string ascii;
+    string ascii;
 };
 
 
