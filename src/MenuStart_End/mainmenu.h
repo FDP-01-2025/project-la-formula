@@ -14,7 +14,12 @@ using namespace std;
 extern bool loadGame();      // Función global en loadGame.h
 extern int actualLevel;      // Variable global definida en main.cpp
 // Variable global para el nombre del jugador
-extern string playerName;
+namespace MainMenu {
+    extern string playerName;
+}
+
+
+namespace MainMenu {
 
 // Configura la ventana de la consola
 void setupConsoleWindow() {
@@ -263,7 +268,7 @@ bool handleContinueGame() {
         rlutil::locate(30, 14);
         cout << "No saved game found. Starting new game...";
         rlutil::msleep(2000);
-        playerName = getPlayerName();
+        MainMenu::playerName = getPlayerName();
         return false;
     }
 }
@@ -359,6 +364,7 @@ void stopMusic()
 {
     PlaySoundA(NULL, NULL, 0);
 }
- 
+
+} // namespace MainMenu
 
 #endif // MAINMENU_H
