@@ -58,6 +58,10 @@ int attackRoulette() {
 bool startCombat()
 {
 
+
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA ("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     Enemy enemy = {
         "CYBER UNIT-X", // Name
         50,             // Hp
@@ -208,6 +212,8 @@ bool startCombat()
     cout << "Remaining enemies: " << TOTAL_ENEMIES - defeatedEnemies << endl;
     Sleep(2000); // para poder ver el mensaje antes de que se limpie
 
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     unlockGate;
 
     if (!unlockGate && defeatedEnemies >= TOTAL_ENEMIES)
@@ -241,6 +247,8 @@ bool startCombat()
 
 void bossFight(Boss boss)
 {
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP); 
 
     Boss finalBoss;
 
@@ -372,6 +380,9 @@ void bossFight(Boss boss)
     player.dmg += 2;
     player.hp = player.hpMax;
     Sleep(4000);
+
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     cout << "Press any key to continue...";
     getch();
 }

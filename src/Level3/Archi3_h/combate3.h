@@ -64,6 +64,9 @@ int attackRoulette() {
 
 bool startCombat()
 {
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA ("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 
     Enemy enemy3 = {
         "IRON PROTOCOL", // Name
@@ -222,6 +225,8 @@ bool startCombat()
     cout << "Remaining enemies: " << TOTAL_ENEMIES3 - defeatedEnemies3 << endl;
     Sleep(2000); // para poder ver el mensaje antes de que se limpie
 
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     unlockGate3;
 
     if (!unlockGate3 && defeatedEnemies3 >= TOTAL_ENEMIES3)
@@ -250,11 +255,16 @@ bool startCombat()
         return false; // ← IMPORTANTE para que el mapa sepa que no se derrotó al enemigo
     }
 
+    
+
 }
 
 
 void bossFight(Boss boss)
 {
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA ("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 
     Boss finalBoss;
 
@@ -389,6 +399,9 @@ void bossFight(Boss boss)
     ::actualLevel = 4;
     
     Sleep(4000);
+
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     cout << "Press any key to continue...";
     getch();
 }

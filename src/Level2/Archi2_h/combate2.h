@@ -64,6 +64,9 @@ int attackRoulette() {
 
 bool startCombat()
 {
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA ("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 
     Enemy enemy2 = {
         "ZIRKON ALPHA", // Name
@@ -224,6 +227,8 @@ bool startCombat()
     cout << "Remaining enemies: " << TOTAL_ENEMIES2 - defeatedEnemies2 << endl;
     Sleep(2000); // para poder ver el mensaje antes de que se limpie
 
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     unlockGate2;
 
     if (!unlockGate2 && defeatedEnemies2 >= TOTAL_ENEMIES2)
@@ -257,6 +262,9 @@ bool startCombat()
 
 void bossFight(Boss boss)
 {
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA ("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 
     Boss finalBoss;
 
@@ -388,6 +396,9 @@ void bossFight(Boss boss)
     player2.dmg += 2;
     player2.hp = player2.hpMax;
     Sleep(4000);
+
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     cout << "Press any key to continue...";
     getch();
 }
