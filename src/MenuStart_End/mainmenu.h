@@ -13,33 +13,22 @@ using namespace std;
 // Declaraciones externas (definidas fuera)
 extern bool loadGame();      // Función global en loadGame.h
 extern int actualLevel;      // Variable global definida en main.cpp
+// Variable global para el nombre del jugador
+namespace MainMenu {
+    extern string playerName;
+}
+
 
 namespace MainMenu {
 
-    void displayPlainFile(const std::string& fileName)
-{
-    std::ifstream file(fileName);
-    if (!file) {
-        std::cerr << "No se pudo abrir el archivo: " << fileName << std::endl;
-        return;
-    }
-    std::string line;
-    while (std::getline(file, line)) {
-        std::cout << line << std::endl;
-    }
-}
-
-// Variable global para el nombre del jugador
-extern string playerName;
-
 // Configura la ventana de la consola
-inline void setupConsoleWindow() {
+void setupConsoleWindow() {
     SetConsoleTitleA("LA FORMULA - The Game");
     system("mode 120,40");
 }
 
 // Obtiene el nombre del jugador con input y diseño bonito
-inline string getPlayerName()
+string getPlayerName()
 {
     rlutil::cls();
     rlutil::setColor(rlutil::LIGHTCYAN);
@@ -114,7 +103,7 @@ inline string getPlayerName()
 }
 
 // Devuelve el color para cada carácter del arte ASCII
-inline int getAsciiColor(char c)
+int getAsciiColor(char c)
 {
     switch (c)
     {
@@ -135,7 +124,7 @@ inline int getAsciiColor(char c)
 }
 
 // Calcula el ancho visual para centrar logos UTF-8
-inline int visualWidth(const string& str)
+int visualWidth(const string& str)
 {
     int width = 0;
     for (size_t i = 0; i < str.length(); )
@@ -181,7 +170,7 @@ void displayFile(const string& fileName)
 }
 
 // Muestra el logo animado
-inline void showLogo()
+void showLogo()
 {
     string logo[] = {
         " █████╗     ███████╗    ████████╗    ███████╗    ██████╗     ███╗   ███╗     █████╗     ████████╗    ██╗  ██╗",
@@ -219,7 +208,7 @@ inline void showLogo()
 }
 
 // Crea el archivo arte2.txt con arte del menú
-inline void createMenuArtFile()
+void createMenuArtFile()
 {
     ofstream menuFile("arte2.txt");
     if (!menuFile)
@@ -264,7 +253,7 @@ inline void createMenuArtFile()
 }
 
 // Maneja la carga de partida guardada
-inline bool handleContinueGame() {
+bool handleContinueGame() {
     rlutil::cls();
     rlutil::locate(30, 12);
     cout << "Loading saved game...";
@@ -279,14 +268,14 @@ inline bool handleContinueGame() {
         rlutil::locate(30, 14);
         cout << "No saved game found. Starting new game...";
         rlutil::msleep(2000);
-        playerName = getPlayerName();
+        MainMenu::playerName = getPlayerName();
         return false;
     }
 }
 
 // Muestra el menú interactivo con selector (W/S y ENTER)
 // Retorna: 0 = New Game, 1 = Continue, 2 = Exit
-inline int interactiveMenu(const char *fileName)
+int interactiveMenu(const char *fileName)
 {
     int selectedOption = 0;
     int key;
@@ -338,7 +327,7 @@ inline int interactiveMenu(const char *fileName)
 
 // Función principal del menú que controla todo el flujo
 // Retorna: 0 = New Game, 1 = Continue, 2 = Exit
-inline int showMainMenu()
+int showMainMenu()
 {
     SetConsoleOutputCP(CP_UTF8);
 
@@ -371,11 +360,11 @@ inline int showMainMenu()
     return selection;
 }
 
-inline void stopMusic()
+void stopMusic()
 {
     PlaySoundA(NULL, NULL, 0);
 }
 
-} 
+} // namespace MainMenu
 
 #endif // MAINMENU_H
