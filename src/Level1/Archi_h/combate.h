@@ -286,6 +286,8 @@ void bossFight(Boss boss)
         string options[] = {"Atack", "Run"};
         int select = 0;
 
+        int key;
+
         while (true) {
             // Mostrar menú
             for (int i = 0; i < 2; i++) {
@@ -299,7 +301,7 @@ void bossFight(Boss boss)
                 }
             }
 
-            int key = getkey();
+            key = getkey();
             if (key == rlutil::KEY_UP || key == 'w' || key == 'W')
                 select = (select - 1 + 2) % 2;      // Mueve el cursor hacia arriba
             else if (key == rlutil::KEY_DOWN || key == 's' || key == 'S')
