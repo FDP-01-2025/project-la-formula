@@ -30,8 +30,9 @@ Este proyecto consiste en un juego de aventuras de género RPG, el cual el jugad
    ```bash
    git clone https://github.com/FDP-01-2025/project-la-formula.git
    
-2. 
+2. Comando de ejecución
+
+   g++ -o game.exe main.cpp -lwinmm
 
 
-## Link de flujogramas
 
