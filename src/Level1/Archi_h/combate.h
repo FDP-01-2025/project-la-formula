@@ -21,31 +21,31 @@ int attackRoulette() {
     int position = 0;
     const int max = 30;
 
-    while (!kbhit()) {
+    while (!kbhit()) {          // Espera a que se presione una tecla
         rlutil::locate(6, 12);
         cout << "[";
-        for (int i = 0; i < max; i++) {
-            if (i == position)
+        for (int i = 0; i < max; i++) {       // Recorre el rango de 0 a max (30)
+            if (i == position)                // Si la posición actual es igual a la posición del cursor  
                 setColor(rlutil::YELLOW), cout << "|";
-            else if (i >= 13 && i <= 16)
+            else if (i >= 13 && i <= 16)            // Si la posición está entre 13 y 16    // verde
                 setColor(rlutil::GREEN), cout << "=";
-            else if ((i >= 10 && i <= 12) || (i >= 17 && i <= 19))
-                setColor(rlutil::YELLOW), cout << "=";
+            else if ((i >= 10 && i <= 12) || (i >= 17 && i <= 19))      
+                setColor(rlutil::YELLOW), cout << "=";                  // amarillo
             else
-                setColor(rlutil::RED), cout << "-";
+                setColor(rlutil::RED), cout << "-";         // rojo
         }
         setColor(rlutil::WHITE);
         cout << "]";
 
         Sleep(50);
-        position = (position + 1) % max;
+        position = (position + 1) % max;            // Incrementa la posición y la reinicia si supera el máximo
     }
 
         getch(); // solo consume la tecla sin esperar más
 
     //DANO
 
-    if (position >= 13 && position <= 16)
+    if (position >= 13 && position <= 16)           
         return rand() % player.dmg + 25; // verde
     else if ((position >= 10 && position <= 12) || (position >= 17 && position <= 19))
         return rand() % player.dmg + 15; // amarillo
