@@ -28,4 +28,10 @@ Este proyecto consiste en un juego de aventuras de género RPG, el cual el jugad
 
 1. Clona este repositorio en tu máquina local:
    ```bash
-   git clone [URL del repositorio]
+   git clone https://github.com/FDP-01-2025/project-la-formula.git
+   
+2. 
+
+
+## Link de flujogramas
+https://app.diagrams.net/# 
