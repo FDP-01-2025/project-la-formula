@@ -151,7 +151,6 @@ bool startCombat()
             while (kbhit()) getch();  // Esto previene repeticiones al mantener presionada una tecla
             Sleep(150); // da tiempo a que se suelte la tecla
 
-            int key = getkey();
             if (key == rlutil::KEY_UP || key == 'w' || key == 'W')
                 select = (select - 1 + 2) % 2;      // Mueve el cursor hacia arriba
             else if (key == rlutil::KEY_DOWN || key == 's' || key == 'S')
@@ -302,6 +301,8 @@ void bossFight(Boss boss)
 
         string options[] = {"Atack", "Run"};
         int select = 0;
+
+        while (kbhit()) getch();   //  Limpiar teclas residuales ANTES de entrar al menú
 
         while (true) {
             // Mostrar menú
