@@ -2,7 +2,7 @@
 
 ## Descripción del Proyecto
 
-Este proyecto consiste en un juego de aventuras de género RPG, el cual el jugador podrá explorar 3 mapas, cada mapa tiene sus propios enemigos y diferentes bosses los cuales se deben de derrotar para avanzar, en los combates hay 2 opciones, atacar y huir, y esta última precisamente se hizo con el objetivo de que busques curarte o guardar partida. El juego utiliza estructuras de control como `if`, `switch`, y bucles `while` y `for` para generar interacciones dinámicas.
+Este proyecto consiste en un juego de aventuras de género RPG, el cual el jugador podrá explorar 3 mapas, cada mapa tiene sus propios enemigos, npcs que hablan sobre el lore de los bosses; los cuales se deben de derrotar para avanzar. En los combates hay 2 opciones, atacar y huir, y esta última precisamente se hizo con el propósito de que busques curarte o guardar partida. El juego utiliza estructuras de control como `if`, `switch`, y bucles `while` y `for` para generar interacciones dinámicas.
 
 
 ## Equipo
