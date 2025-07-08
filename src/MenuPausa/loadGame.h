@@ -39,7 +39,7 @@ namespace Nivel3 {
 }
 
 // Función global de carga - versión con archivos de texto
-inline bool loadGame() {
+ bool loadGame() {
     ifstream file("savegame.txt");
     if (!file) {
         cout << "No save file found." << endl;

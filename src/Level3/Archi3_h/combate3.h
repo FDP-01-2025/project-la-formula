@@ -50,7 +50,7 @@ int attackRoulette() {
 
         getch(); // solo consume la tecla sin esperar más
 
-    //DANO
+    //DAÑO
 
     if (position >= 13 && position <= 16)
         return rand() % player3.dmg + 25; // verde

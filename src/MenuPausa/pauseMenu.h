@@ -11,7 +11,7 @@ namespace PauseMenu {
 
 // Muestra el menú de pausa y permite guardar partida o salir sin guardar
 // Retorna true si el jugador decide salir del juego, false si quiere continuar
-inline bool showPauseMenu()
+bool showPauseMenu()
 {
     rlutil::cls();
     rlutil::hidecursor();
@@ -24,7 +24,7 @@ inline bool showPauseMenu()
     int seleccion = 0;
     int key;
 
-    while (true)
+    while (true) // Bucle para mostrar el menú de pausa
     {
         rlutil::cls();
         cout << "=== PAUSE MENU ===" << endl << endl;

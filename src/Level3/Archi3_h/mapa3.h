@@ -173,7 +173,7 @@ void movePlayer(int dx, int dy){
 }
 
 
-void drawView_L3(){
+void drawView_L3(){// Dibuja la vista del mapa en la consola, centrada en el jugador.
 
     int offsetX = playerX3 - VIEW_WIDTH3 / 2;      //Calcula la **esquina superior izquierda** de la "vista"
     int offsetY = playerY3 - VIEW_HEIGHT3 / 2;
@@ -197,7 +197,7 @@ void drawView_L3(){
         else {
         char tile = map[mapY][mapX];
 
-        switch (tile) {
+        switch (tile) {// Cambia el color del tile según su tipo
         case '#': rlutil::setColor(rlutil::GREY); break;
         case '~': rlutil::setColor(rlutil::CYAN); break;
         case 'T': rlutil::setColor(rlutil::GREEN); break;
@@ -262,7 +262,7 @@ void checkMovement_L3(){
 }
 
 
-void showHUD_L3(){
+void showHUD_L3(){ // Muestra el HUD del nivel 3
 
     rlutil::locate(1, 1);
     rlutil::setColor(rlutil::LIGHTCYAN);
