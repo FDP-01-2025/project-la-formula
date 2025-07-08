@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "rlutil.h"
+#include "../../Level1/Archi_h/rlutil.h"
 #include "../../Level1/Archi_h/Structs.h"
 #include "../../Level1/Archi_h/boss.h"
 #include "temporal2.h"
@@ -64,6 +64,9 @@ int attackRoulette() {
 
 bool startCombat()
 {
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA ("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 
     Enemy enemy2 = {
         "ZIRKON ALPHA", // Name
@@ -148,10 +151,11 @@ bool startCombat()
             while (kbhit()) getch();  // Esto previene repeticiones al mantener presionada una tecla
             Sleep(150); // da tiempo a que se suelte la tecla
 
-            if (key == rlutil::KEY_UP)
-                select = (select + 2) % 2;
-            else if (key == rlutil::KEY_DOWN)
-                select = (select + 1) % 2;
+            int key = getkey();
+            if (key == rlutil::KEY_UP || key == 'w' || key == 'W')
+                select = (select - 1 + 2) % 2;      // Mueve el cursor hacia arriba
+            else if (key == rlutil::KEY_DOWN || key == 's' || key == 'S')
+                select = (select + 1) % 2;          // Mueve el cursor hacia abajo
             else if (key == rlutil::KEY_ENTER)
                 break;
         }
@@ -224,6 +228,8 @@ bool startCombat()
     cout << "Remaining enemies: " << TOTAL_ENEMIES2 - defeatedEnemies2 << endl;
     Sleep(2000); // para poder ver el mensaje antes de que se limpie
 
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     unlockGate2;
 
     if (!unlockGate2 && defeatedEnemies2 >= TOTAL_ENEMIES2)
@@ -257,6 +263,9 @@ bool startCombat()
 
 void bossFight(Boss boss)
 {
+    PlaySoundA(NULL, NULL, 0);
+    PlaySoundA ("CombtSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
 
     Boss finalBoss;
 
@@ -308,10 +317,10 @@ void bossFight(Boss boss)
             }
 
             int key = getkey();
-            if (key == rlutil::KEY_UP)
-                select = (select - 1 + 2) % 2;
-            else if (key == rlutil::KEY_DOWN)
-                select = (select + 1) % 2;
+            if (key == rlutil::KEY_UP || key == 'w' || key == 'W')
+                select = (select - 1 + 2) % 2;      // Mueve el cursor hacia arriba
+            else if (key == rlutil::KEY_DOWN || key == 's' || key == 'S')
+                select = (select + 1) % 2;          // Mueve el cursor hacia abajo
             else if (key == rlutil::KEY_ENTER)
                 break;
         }
@@ -388,6 +397,9 @@ void bossFight(Boss boss)
     player2.dmg += 2;
     player2.hp = player2.hpMax;
     Sleep(4000);
+
+    PlaySoundA("LvlSong.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+
     cout << "Press any key to continue...";
     getch();
 }
