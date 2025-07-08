@@ -14,7 +14,7 @@ const int MAP_HEIGHT = 20;   //alto de mapa
 const int VIEW_WIDTH = 50;   //vista de ancho de mapa
 const int VIEW_HEIGHT = 20;  //vista de alto de mapa
 
-char map[MAP_HEIGHT][MAP_WIDTH + 1] = {
+char map[MAP_HEIGHT][MAP_WIDTH + 1] = {         // Mapa del nivel 1
     "################################################################################",
     "#......................~~~~~~.........T.............~~~~~...............~~~~~..#",
     "#...#######.............~~~~~.............######..........######..............#",
@@ -170,7 +170,7 @@ void movePlayer(int dx, int dy){
         }
     }
 
-    playerX = newX;
+    playerX = newX;         //Actualiza la posición del jugador al nuevo valor
     playerY = newY;
     
 
@@ -272,7 +272,7 @@ void showHUD(){
 
     rlutil::locate(1, 1);
     rlutil::setColor(rlutil::LIGHTCYAN);
-    cout << "Player: " << MainMenu::playerName << "  ";
+    cout << "Player: " << MainMenu::playerName << "  ";     // Mostrar el nombre del jugador desde el menú principal
     rlutil::setColor(rlutil::WHITE);
     cout << "XP Level: " << player.level << "   Damage: " << player.dmg << "   HP: " << player.hp << "    ";
 

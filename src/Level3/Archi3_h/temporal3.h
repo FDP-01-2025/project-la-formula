@@ -8,7 +8,7 @@ Boss thirdBoss = {
     "Adam Smasher",       //NOMBRE DE JEFE  
     200,                    //HP
     200,                    //HP MAX
-    1,                     //DANO
+    15,                     //DANO
     R"(
               :. .:          .   .                          
               .....      .. .     .:..                    

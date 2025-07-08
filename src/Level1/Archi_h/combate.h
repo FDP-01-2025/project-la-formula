@@ -66,7 +66,7 @@ bool startCombat()
         "CYBER UNIT-X", // Name
         50,             // Hp
         50,             // hpMax
-        8,              // dano
+        10,              // dano
         R"(    
                    <((((((\\\
                    /      . }\
