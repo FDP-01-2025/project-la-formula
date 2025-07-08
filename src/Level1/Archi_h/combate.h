@@ -137,9 +137,9 @@ bool startCombat()
             while (kbhit()) getch();  // Esto previene repeticiones al mantener presionada una tecla
             Sleep(150); // da tiempo a que se suelte la tecla
 
-            if (key == rlutil::KEY_UP)
+            if (key == rlutil::KEY_UP | key == 'w'|| key == 'W')
                 select = (select - 1 + 2) % 2;     // Mueve el cursor hacia arriba                  
-            else if (key == rlutil::KEY_DOWN)
+            else if (key == rlutil::KEY_DOWN | key == 's' || key == 'S')
                 select = (select + 1) % 2;          // Mueve el cursor hacia abajo
             else if (key == rlutil::KEY_ENTER)
                 break;
@@ -300,9 +300,9 @@ void bossFight(Boss boss)
             }
 
             int key = getkey();
-            if (key == rlutil::KEY_UP)
+            if (key == rlutil::KEY_UP || key == 'w' || key == 'W')
                 select = (select - 1 + 2) % 2;      // Mueve el cursor hacia arriba
-            else if (key == rlutil::KEY_DOWN)
+            else if (key == rlutil::KEY_DOWN || key == 's' || key == 'S')
                 select = (select + 1) % 2;          // Mueve el cursor hacia abajo
             else if (key == rlutil::KEY_ENTER)
                 break;
