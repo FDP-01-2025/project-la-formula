@@ -59,7 +59,7 @@ void movePlayer(int dx, int dy){
         if(destiny == 'N') {        //NPC interactivo
 
             // Limpiar el buffer de teclas antes de entrar al menú
-            while (kbhit()) getch();
+            while (kbhit()) getch();        //Cuando ya no hay más teclas, sale del ciclo
             
             rlutil::cls(); // Limpiar toda la pantalla
             rlutil::setColor(rlutil::CYAN);
@@ -231,13 +231,15 @@ void drawView(){
 
 bool keyHeld = false;                    //Indica si una tecla está mantenida presionada.
 unsigned long lastMoveTime = 0;          //guarda el momento en que se movió por última vez el jugador.
-const unsigned long repeatDelay = 80;    ////cantidad mínima de tiempo (80 ms) entre movimientos si se deja la tecla presionada.
+const unsigned long repeatDelay = 80;    //cantidad mínima de tiempo (80 ms) entre movimientos si se deja la tecla presionada.
 
 
 // Sistema de movimiento avanzado con GetAsyncKeyState - permite mantener teclas presionadas
 void checkMovement(){
     static int lastDir = 0;         // Se usa para recordar la última dirección presionada entre llamadas.
     unsigned long now = GetTickCount();  // Guarda el tiempo actual en milisegundos. (es de windows)
+
+    //captura todas las variables locales por referencia ([&])
 
     auto move = [&](int dir, int dx, int dy) {       // función lambda que toma una tecla (dir) Y un desplazamiento dx, dy (para mover al jugador)
         if (GetAsyncKeyState(dir) & 0x8000) {     // Verifica si la tecla **está siendo presionada** en este instante y 0x8000 es un flag que indica si la tecla está físicamente abajo.
