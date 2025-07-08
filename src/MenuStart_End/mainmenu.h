@@ -262,6 +262,7 @@ void createMenuArtFile()
     ofstream menuFile("arte2.txt");
     if (!menuFile)
         return;
+    
     string lines[] = {
         " .   `-._.-*   /    `-*'  `*-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
         "-._.*        _.-'        .-.    `-.%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%| |          M E N U           | |",
@@ -294,11 +295,9 @@ void createMenuArtFile()
         " ;  ;         ;   ;        :%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+++----------------------------+++",
     };
     
-    const int numLines = sizeof(lines) / sizeof(lines[0]);
-    for (int i = 0; i < numLines; ++i)
-    {
-        menuFile << lines[i] << endl;
-    }
+    for (const string& line : lines)
+        menuFile << line << "\n";
+
     menuFile.close();
 }
 
@@ -336,13 +335,13 @@ int interactiveMenu(const char *fileName)
     displayFile(string(fileName)); // Convert const char* to string
     
     // Initial position of the selector
-    rlutil::locate(75, 5 + selectedOption);
+    rlutil::locate(75, 4 + selectedOption);
     cout << '>'; // Visible selector
     do
     {
         key = rlutil::getkey();
         // Erase previous selector
-        rlutil::locate(75, 5 + selectedOption);
+        rlutil::locate(75, 4 + selectedOption);
         cout << " ";
         switch (key)
         {
@@ -360,14 +359,14 @@ int interactiveMenu(const char *fileName)
             break;
         }
         // Draw new selector
-        rlutil::locate(75, 5 + selectedOption);
+        rlutil::locate(75, 4 + selectedOption);
         cout << '>';
     } while (key != rlutil::KEY_ENTER);
     
     // Show message based on the chosen option
-    rlutil::locate(75, 5 + selectedOption);
+    rlutil::locate(75, 4 + selectedOption);
     cout << " "; // Erase selector
-    rlutil::locate(77, 5);
+    rlutil::locate(77, 4 + selectedOption);
     
     switch (selectedOption)
     {

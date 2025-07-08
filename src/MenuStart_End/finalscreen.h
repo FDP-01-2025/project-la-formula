@@ -75,7 +75,7 @@ void createArtFile()
         ":::*%@@@@@@@%%%################################+:+########%-::::#%%@@@@@@@%%################@@@@@@@@@@@@@###%%%#----+@%%",
         "==-#%@@@@@@%%%%###########################################%=---=#%%%@@@@@@%%################@@@%%@@%@@%@@###%%%%%%%%%%%%",
     };
-
+    
     for (const string& line : lines)
         artFile << line << "\n";
 
@@ -90,7 +90,7 @@ void displayArtFile(const string& fileName)
     if (!artFile)
         return;
 
-    string artWidthStr = "124"; // Usando string en lugar de constante
+    string artWidthStr = "124"; // Usando string 
     int artWidth = stoi(artWidthStr); // Convertir a entero para usar en el bucle
     
     string line;
@@ -116,15 +116,7 @@ void displayArtFile(const string& fileName)
 
 
 // Displays animated text at a specific position
-void displayAnimatedTextAtPosition(const string &text, int x, int y, int delayMs = 100)
-{
-    rlutil::locate(x, y);
-    for (char c : text)
-    {
-        cout << c << flush;
-        rlutil::msleep(delayMs);
-    }
-}
+
 
 // Displays the final cinematic with player statistics
 void displayFinalCinematic()
